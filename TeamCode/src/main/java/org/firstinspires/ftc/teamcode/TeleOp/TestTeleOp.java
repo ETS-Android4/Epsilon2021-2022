@@ -21,10 +21,10 @@ public class TestTeleOp extends LinearOpMode {
            double x = gamepad1.left_stick_x;
            double r = gamepad1.right_stick_x;
 
-           robot.drivetrain.frontLeft.setPower(y+r);
-           robot.drivetrain.frontRight.setPower(y-r);
-           robot.drivetrain.backLeft.setPower(y+r);
-           robot.drivetrain.backRight.setPower(y-r);
+           robot.drivetrain.frontLeft.setPower(y+r+x);
+           robot.drivetrain.frontRight.setPower(y-r-x);
+           robot.drivetrain.backLeft.setPower(y+r-x);
+           robot.drivetrain.backRight.setPower(y-r+x);
         }
     }
 }

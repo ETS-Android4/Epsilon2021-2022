@@ -19,7 +19,9 @@ public class OurRobot implements EpsilonRobot {
     public CarouselJank carousel = new CarouselJank();
     public Intake intake = new Intake();
 
-    private final Subsystem[] Subsystems = {drivetrain, carousel, intake};    //Array for all the subsystems
+    private final Subsystem[] Subsystems = {drivetrain
+    //        , carousel, intake
+    };    //Array for all the subsystems
 
     @Override
     // "initialize" method runs the "initialize" method in all the subsystems
