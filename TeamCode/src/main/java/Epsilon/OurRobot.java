@@ -21,8 +21,8 @@ public class OurRobot implements EpsilonRobot {
     public Intake intake = new Intake();
     public IMU imu = new IMU();
 
-    private final Subsystem[] Subsystems = {drivetrain
-    //        , carousel, intake, imu
+    private final Subsystem[] Subsystems = {drivetrain, imu
+    //        , carousel, intake,
     };    //Array for all the subsystems
 
     @Override
