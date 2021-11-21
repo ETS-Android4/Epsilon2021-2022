@@ -14,6 +14,7 @@ public class IMU implements Subsystem {
     public BNO055IMU imu;
     public double angle;
     private double lastIMUReading;
+    private static double zero = 0;
 
     public void initialize(LinearOpMode opMode) {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
@@ -40,6 +41,18 @@ public class IMU implements Subsystem {
             angle += 360;
         }
         return angle;
+    }
+
+    public void setZero(double zeroAngle){
+        zero = zeroAngle;
+    }
+
+    public double zero(){
+        return zero;
+    }
+
+    public double angle() {
+        return angle + zero;
     }
 
     public void update() {

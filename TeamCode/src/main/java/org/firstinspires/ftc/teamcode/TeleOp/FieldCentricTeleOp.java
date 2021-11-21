@@ -18,8 +18,25 @@ public class FieldCentricTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
+            if(gamepad1.dpad_up) {
+                robot.imu.setZero(0);
+            }
+            if(gamepad1.dpad_right) {
+                robot.imu.setZero(90);
+            }
+            if(gamepad1.dpad_down) {
+                robot.imu.setZero(180);
+            }
+            if(gamepad1.dpad_left) {
+                robot.imu.setZero(270);
+            }
+
             robot.imu.update();
-            double angle = robot.imu.angle;
+            double angle = -robot.imu.angle();
+
+            telemetry.addData("zero", robot.imu.zero());
+            telemetry.addData("angle", angle);
+            telemetry.update();
 
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
