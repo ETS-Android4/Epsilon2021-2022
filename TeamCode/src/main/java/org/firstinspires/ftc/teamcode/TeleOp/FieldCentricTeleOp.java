@@ -15,9 +15,14 @@ public class FieldCentricTeleOp extends LinearOpMode {
         OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
         robot.initialize(this);
 
+        robot.imu.setZero(-robot.imu.angle());
+
         waitForStart();
 
         while (opModeIsActive()){
+
+            /*
+            set angle before
             if(gamepad1.dpad_up) {
                 robot.imu.setZero(0);
             }
@@ -30,6 +35,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             if(gamepad1.dpad_left) {
                 robot.imu.setZero(270);
             }
+            */
 
             robot.imu.update();
             double angle = -robot.imu.angle();

@@ -12,7 +12,7 @@ import Epsilon.Superclasses.Subsystem;
 public class IMU implements Subsystem {
 
     public BNO055IMU imu;
-    public double angle;
+    private double angle;
     private double lastIMUReading;
     private static double zero = 0;
 
