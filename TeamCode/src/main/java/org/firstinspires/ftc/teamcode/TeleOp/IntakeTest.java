@@ -12,9 +12,11 @@ public class IntakeTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
 
-        waitForStart();
+
         OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
         robot.initialize(this);
+
+        waitForStart();
 
         while (opModeIsActive()){
             boolean x = gamepad1.x;

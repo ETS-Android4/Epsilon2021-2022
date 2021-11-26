@@ -10,6 +10,7 @@ import Epsilon.Superclasses.Subsystem;
 //Initializes all the motors/hardware for the drivetrain
 public class Intake implements Subsystem {
 
+    public static final int TICKS_PER_ROTATION = 300;       //this is not correct
     public DcMotor wheel;
 
     public void initialize(LinearOpMode opMode) {
@@ -17,5 +18,10 @@ public class Intake implements Subsystem {
         wheel = opMode.hardwareMap.dcMotor.get("intake");
 
         wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+    public void eat(int power, int rotations){
+        wheel.setPower(power);
+        wheel.setTargetPosition(rotations*TICKS_PER_ROTATION);
+
     }
 }

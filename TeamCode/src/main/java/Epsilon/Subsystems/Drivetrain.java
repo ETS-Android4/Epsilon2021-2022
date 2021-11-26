@@ -32,21 +32,26 @@ public class Drivetrain implements Subsystem {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-    public void Power(double power, String Type) {
+    public enum MoveType {
+        DRIVE,
+        STRAFE,
+        TURN
+    }
+    public void Power(double power, MoveType Type) {
         switch (Type) {
-            case "DRIVE":
+            case DRIVE:
                 frontLeft.setPower(power);
                 frontRight.setPower(power);
                 backLeft.setPower(power);
                 backRight.setPower(power);
                 break;
-            case "STRAFE":
+            case STRAFE:
                 frontLeft.setPower(-1 * power);
                 frontRight.setPower(power);
                 backLeft.setPower(power);
                 backRight.setPower(-1 * power);
                 break;
-            case "TURN":
+            case TURN:
                 frontLeft.setPower(-1 * power);
                 frontRight.setPower(power);
                 backLeft.setPower(-1 * power);
@@ -54,12 +59,14 @@ public class Drivetrain implements Subsystem {
                 break;
         }
     }
+
     public int INtoEC(int inches) {
         //Inches to Encoder Counts Stuff
         int EncoderCounts = inches;
         return EncoderCounts;
     }
-    public void Move(double power, int inches, String Type) {
+
+    public void Move(double power, int inches, MoveType Type) {
         int EncoderCounts = INtoEC(inches);
         //Filler for setting Encoder Counts (this is for default motor encoders, not odo)
         frontLeft.setTargetPosition(EncoderCounts);
