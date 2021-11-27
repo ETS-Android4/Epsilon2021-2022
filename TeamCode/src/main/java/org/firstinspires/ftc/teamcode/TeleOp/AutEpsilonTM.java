@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import Epsilon.OurRobot;
 import Epsilon.Subsystems.Drivetrain;
 
+@TeleOp
 public class AutEpsilonTM extends LinearOpMode {
     OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
     @Override
