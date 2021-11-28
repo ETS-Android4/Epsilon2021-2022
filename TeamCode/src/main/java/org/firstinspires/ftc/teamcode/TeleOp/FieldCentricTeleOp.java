@@ -33,7 +33,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.imu.setZero(180);
             }
             if(gamepad1.dpad_left) {
-                robot.imu.setZero(270);
+                robot.imu.setZero(-90);
             }
             */
 
