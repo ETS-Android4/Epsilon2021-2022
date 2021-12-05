@@ -13,12 +13,12 @@ import Epsilon.Superclasses.Subsystem;
 //Initializes all the motors/hardware for the drivetrain
 public class Drivetrain implements Subsystem {
 
+    Odometry odo = new Odometry();
+
     public DcMotor frontLeft;
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor backRight;
-    //Not sure if this is how you initialize the encoder, will probably go in a subsystem called "Odometry"
-    public DcMotor encoderX;
 
     //PID constants - will be tuned to different values
     private double kP = 0;
@@ -31,8 +31,6 @@ public class Drivetrain implements Subsystem {
         frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
         backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
         backRight = opMode.hardwareMap.dcMotor.get("backRight");
-
-        encoderX = opMode.hardwareMap.dcMotor.get("encoderX");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -98,7 +96,7 @@ public class Drivetrain implements Subsystem {
      ******************/
 
     public void resetEncoderPos(){
-        encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odo.encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //might not even be necessary
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -111,14 +109,14 @@ public class Drivetrain implements Subsystem {
     public void moveStraight(double inches){
 
         double target = INtoEC(inches);
-        double currentPos = encoderX.getCurrentPosition();
+        double currentPos = odo.encoderX.getCurrentPosition();
         double lastError = 0;
         double integralSum = 0;
 
         ElapsedTime timer = new ElapsedTime();
         while (target - currentPos > 0){
 
-            currentPos = encoderX.getCurrentPosition();
+            currentPos = odo.encoderX.getCurrentPosition();
             //calculate the error
             double error = target - currentPos;
 

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import Epsilon.Subsystems.Drivetrain;
 import Epsilon.Subsystems.CarouselJank;
 import Epsilon.Subsystems.Intake;
+import Epsilon.Subsystems.Odometry;
 import Epsilon.Subsystems.Outtake;
 import Epsilon.Subsystems.IMU;
 import Epsilon.Superclasses.EpsilonRobot;
@@ -22,12 +23,11 @@ public class OurRobot implements EpsilonRobot {
     public Intake intake = new Intake();
     public IMU imu = new IMU();
     public Outtake outtake = new Outtake();
+    public Odometry Odometry = new Odometry();
 
-    private final Subsystem[] Subsystems = {intake//drivetrain, imu
+    private final Subsystem[] Subsystems = {intake, drivetrain, imu, Odometry
             //carousel
     //        , carousel, intake, outtake
-
-
     };    //Array for all the subsystems
 
     @Override
