@@ -12,7 +12,8 @@ import Epsilon.Superclasses.Subsystem;
 public class Outtake implements Subsystem {
 
     public final double TICKS_PER_ROTATION = 300;       //this is not correct
-    public final double TICKS_PER_INCH = 50/6;      //temporary numbers lmao please fix later
+    double circumference = 1.0;                             //circumference in inches
+    public final double TICKS_PER_INCH = 145.1/circumference;      //temporary numbers lmao please fix later
     public DcMotor top;
     public DcMotor bottom;
 
