@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Base64;
 
@@ -16,6 +17,13 @@ public class Drivetrain implements Subsystem {
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor backRight;
+    //Not sure if this is how you initialize the encoder, will probably go in a subsystem called "Odometry"
+    public DcMotor encoderX;
+
+    //PID constants - will be tuned to different values
+    private double kP = 0;
+    private double kI = 0;
+    private double kD = 0;
 
     public void initialize(LinearOpMode opMode) {
 
@@ -24,8 +32,16 @@ public class Drivetrain implements Subsystem {
         backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
         backRight = opMode.hardwareMap.dcMotor.get("backRight");
 
+        encoderX = opMode.hardwareMap.dcMotor.get("encoderX");
+
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //Run without encoders because we'll probably be using Odo encoders
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -60,20 +76,68 @@ public class Drivetrain implements Subsystem {
         }
     }
 
-    public int INtoEC(int inches) {
+    public double INtoEC(double inches) {       //Hey Jacob I changed from int to double
         //Inches to Encoder Counts Stuff
-        int EncoderCounts = inches;
+        double EncoderCounts = inches;
         return EncoderCounts;
     }
 
     public void Move(double power, int inches, MoveType Type) {
-        int EncoderCounts = INtoEC(inches);
+        double EncoderCounts = INtoEC(inches);
         //Filler for setting Encoder Counts (this is for default motor encoders, not odo)
-        frontLeft.setTargetPosition(EncoderCounts);
-        frontRight.setTargetPosition(EncoderCounts);
-        backLeft.setTargetPosition(EncoderCounts);
-        backRight.setTargetPosition(EncoderCounts);
+        frontLeft.setTargetPosition((int) EncoderCounts);
+        frontRight.setTargetPosition((int) EncoderCounts);
+        backLeft.setTargetPosition((int) EncoderCounts);
+        backRight.setTargetPosition((int) EncoderCounts);
         //POWAAAAA
         Power(power, Type);
     }
+
+    /*******************
+     * PID Stuff Woohoo
+     ******************/
+
+    public void resetEncoderPos(){
+        encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //might not even be necessary
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    //Basic PID method for linear movement
+    public void moveStraight(double inches){
+
+        double target = INtoEC(inches);
+        double currentPos = encoderX.getCurrentPosition();
+        double lastError = 0;
+        double integralSum = 0;
+
+        ElapsedTime timer = new ElapsedTime();
+        while (target - currentPos > 0){
+
+            currentPos = encoderX.getCurrentPosition();
+            //calculate the error
+            double error = target - currentPos;
+
+            //ROC of the error
+            double derivative  = (error - lastError) / timer.seconds();
+
+            //sum of all error over time
+            integralSum = integralSum + (error*timer.seconds());
+
+            double power = (kP*error) + (kI*integralSum) + (kD*derivative);
+
+            frontLeft.setPower(power);
+            backLeft.setPower(power);
+            frontRight.setPower(power);
+            backRight.setPower(power);
+
+            lastError = error;
+            timer.reset();
+        }
+    }
+
 }
