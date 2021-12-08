@@ -79,7 +79,7 @@ public class Drivetrain implements Subsystem {
         double EncoderCounts = inches;
         return EncoderCounts;
     }
-
+/*
     public void Move(double power, int inches, MoveType Type) {
         double EncoderCounts = INtoEC(inches);
         //Filler for setting Encoder Counts (this is for default motor encoders, not odo)
@@ -90,7 +90,7 @@ public class Drivetrain implements Subsystem {
         //POWAAAAA
         Power(power, Type);
     }
-
+*/
     /*******************
      * PID Stuff Woohoo
      ******************/
@@ -106,7 +106,7 @@ public class Drivetrain implements Subsystem {
     }
 
     //Basic PID method for linear movement
-    public void moveStraight(double inches){
+    public void Move(double inches, MoveType Type){
 
         double target = INtoEC(inches);
         double currentPos = odo.encoderX.getCurrentPosition();
@@ -128,11 +128,13 @@ public class Drivetrain implements Subsystem {
 
             double power = (kP*error) + (kI*integralSum) + (kD*derivative);
 
+            Power(power, Type);
+/*
             frontLeft.setPower(power);
             backLeft.setPower(power);
             frontRight.setPower(power);
             backRight.setPower(power);
-
+*/
             lastError = error;
             timer.reset();
         }

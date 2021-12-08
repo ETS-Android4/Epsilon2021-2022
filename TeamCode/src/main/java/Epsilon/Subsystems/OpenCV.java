@@ -19,9 +19,10 @@ import java.nio.channels.Pipe;
 import Epsilon.Superclasses.Subsystem;
 
 public class OpenCV implements Subsystem {
-
+    LinearOpMode opMode;
     @Override
     public void initialize(LinearOpMode opMode) {
+        this.opMode = opMode;
         // With live preview
        // OpenCvCamera camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
 
@@ -44,9 +45,9 @@ public class OpenCV implements Subsystem {
             }
         });
     }
-    static class Pipeline extends OpenCvPipeline {
+    public static class Pipeline extends OpenCvPipeline {
         //https://github.com/OpenFTC/EasyOpenCV/blob/master/examples/src/main/java/org/firstinspires/ftc/teamcode/SkystoneDeterminationExample.java
-        enum ObjectPos {
+        public enum ObjectPos {
             LEFT,
             CENTER,
             RIGHT
@@ -81,7 +82,7 @@ public class OpenCV implements Subsystem {
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
         int avg1, avg2, avg3;
-        private ObjectPos position = ObjectPos.LEFT;
+        public static ObjectPos position = ObjectPos.LEFT;
 
         void inputToCb(Mat input)
         {
@@ -114,7 +115,7 @@ public class OpenCV implements Subsystem {
             }
             return input;
         }
-        public ObjectPos getAnalysis() {
+        public static ObjectPos getAnalysis() {
             return position;
         }
     }

@@ -1,5 +1,7 @@
 package Epsilon;
 
+import android.graphics.Path;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -7,6 +9,7 @@ import Epsilon.Subsystems.Drivetrain;
 import Epsilon.Subsystems.CarouselJank;
 import Epsilon.Subsystems.Intake;
 import Epsilon.Subsystems.Odometry;
+import Epsilon.Subsystems.OpenCV;
 import Epsilon.Subsystems.Outtake;
 import Epsilon.Subsystems.IMU;
 import Epsilon.Superclasses.EpsilonRobot;
@@ -24,6 +27,7 @@ public class OurRobot implements EpsilonRobot {
     public IMU imu = new IMU();
     public Outtake outtake = new Outtake();
     public Odometry Odometry = new Odometry();
+    public OpenCV OpenCV = new OpenCV();
 
     private final Subsystem[] Subsystems = {intake, drivetrain, imu, Odometry
             //carousel
