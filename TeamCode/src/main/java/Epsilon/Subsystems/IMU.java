@@ -6,15 +6,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import Epsilon.Superclasses.Subsystem;
 
 public class IMU implements Subsystem {
 
+    Drivetrain drivetrain = new Drivetrain();
+
     public BNO055IMU imu;
     private double angle;
     private double lastIMUReading;
     private static double zero = 0;
+    static final double P_TURN_COEFF = 0.025;
+    static final double HEADING_THRESHOLD = 0.5;
 
     public void initialize(LinearOpMode opMode) {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
@@ -41,6 +51,30 @@ public class IMU implements Subsystem {
             angle += 360;
         }
         return angle;
+    }
+    public void gyroTurn(double speed, double angle){
+        double error;
+        double steer;
+        double leftSpeed, rightSpeed;
+        error = getError (angle);
+        while (Math.abs(error) > HEADING_THRESHOLD) {
+            steer = Range.clip(P_TURN_COEFF * error,-speed,speed);
+            rightSpeed = steer;
+            leftSpeed = -rightSpeed;
+
+            drivetrain.frontLeft.setPower(leftSpeed);
+            drivetrain.backLeft.setPower(leftSpeed);
+            drivetrain.frontRight.setPower(rightSpeed);
+            drivetrain.backRight.setPower(rightSpeed);
+        }
+    }
+    public double getError (double targetAngle){
+        double angleError;
+        Orientation orientation = imu.getAngularOrientation(
+                AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        angleError = targetAngle - orientation.thirdAngle;
+        normalize(angleError);
+        return angleError;
     }
 
     public void setZero(double zeroAngle){
