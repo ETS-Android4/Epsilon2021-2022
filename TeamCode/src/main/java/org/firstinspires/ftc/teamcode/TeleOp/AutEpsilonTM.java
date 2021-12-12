@@ -17,7 +17,11 @@ public class AutEpsilonTM extends LinearOpMode {
         //Scan Duck or Cool Team Game Element
         robot.OpenCV.initialize(this);
         OpenCV.Pipeline.ObjectPos duckPosition = OpenCV.Pipeline.getAnalysis();
-        robot.drivetrain.Move(18, Drivetrain.MoveType.STRAFE);
+
+        //Jacob I altered the PID code to include strafing, so I commented out your code for now so we can implement it later
+        //idk if i did it correctly but we'll see
+
+        /*    robot.drivetrain.Move(18, Drivetrain.MoveType.STRAFE);
         robot.drivetrain.Move(9, Drivetrain.MoveType.DRIVE);
         if (duckPosition == OpenCV.Pipeline.ObjectPos.LEFT) {
             robot.outtake.extendo(7,0, 0.75);
@@ -54,5 +58,6 @@ public class AutEpsilonTM extends LinearOpMode {
         wait(1500);
         robot.drivetrain.Move(18,  Drivetrain.MoveType.STRAFE);
         //Park in Storage Unit
+        */
     }
 }

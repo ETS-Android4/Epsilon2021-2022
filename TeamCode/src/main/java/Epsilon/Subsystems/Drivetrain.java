@@ -97,6 +97,9 @@ public class Drivetrain implements Subsystem {
 
     public void resetEncoderPos(){
         odo.encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odo.encoderX.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        odo.encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odo.encoderY.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //might not even be necessary
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -105,37 +108,51 @@ public class Drivetrain implements Subsystem {
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    //Basic PID method for linear movement
-    public void Move(double inches, MoveType Type){
+    //Basic PID method for linear/lateral movement
+    public void Move(double inchesX, double inchesY, MoveType Type){
 
-        double target = INtoEC(inches);
-        double currentPos = odo.encoderX.getCurrentPosition();
-        double lastError = 0;
-        double integralSum = 0;
+        double targetX = INtoEC(inchesX);
+        double targetY = INtoEC(inchesY);
+        double currentPosX = odo.encoderX.getCurrentPosition();
+        double currentPosY = odo.encoderY.getCurrentPosition();
+        double lastErrorX = 0;
+        double lastErrorY = 0;
+        double integralSumX = 0;
+        double integralSumY = 0;
+
+        resetEncoderPos();
 
         ElapsedTime timer = new ElapsedTime();
-        while (target - currentPos > 0){
+        while (targetX - currentPosX > 0 || targetY - currentPosY > 0){
 
-            currentPos = odo.encoderX.getCurrentPosition();
+            currentPosX = odo.encoderX.getCurrentPosition();
+            currentPosY = odo.encoderY.getCurrentPosition();
+
             //calculate the error
-            double error = target - currentPos;
+            double errorX = targetX - currentPosX;
+            double errorY = targetY - currentPosY;
 
             //ROC of the error
-            double derivative  = (error - lastError) / timer.seconds();
+            double derivativeX = (errorX - lastErrorX) / timer.seconds();
+            double derivativeY = (errorY - lastErrorY) / timer.seconds();
+
 
             //sum of all error over time
-            integralSum = integralSum + (error*timer.seconds());
+            integralSumX = integralSumX + (errorX*timer.seconds());
+            integralSumY = integralSumY + (errorY*timer.seconds());
 
-            double power = (kP*error) + (kI*integralSum) + (kD*derivative);
+            double powerX = (kP*errorX) + (kI*integralSumX) + (kD*derivativeX);
+            double powerY = (kP*errorY) + (kI*integralSumY) + (kD*derivativeY);
 
-            Power(power, Type);
+            //Power(power, Type);
 /*
             frontLeft.setPower(power);
             backLeft.setPower(power);
             frontRight.setPower(power);
             backRight.setPower(power);
 */
-            lastError = error;
+            lastErrorX = errorX;
+            lastErrorY = errorY;
             timer.reset();
         }
     }
