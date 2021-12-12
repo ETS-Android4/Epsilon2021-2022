@@ -7,19 +7,20 @@ import java.time.Year;
 
 import Epsilon.Superclasses.Subsystem;
 
-public class Odometry implements Runnable, Subsystem {
+public class Odometry implements Subsystem {
     //public Dc<p>
+
     public DcMotor encoderX;
     public DcMotor encoderY;
 
     //public double lastEncoderXPos;
-    public double lastEncoderYPos = encoderY.getCurrentPosition();
-    public double lastEncoderXPos = encoderX.getCurrentPosition();
+    public double lastEncoderYPos;
+    public double lastEncoderXPos;
     public double angle = 0;
     public double xPos;
     public double yPos;
-    public double heading;  //aka angle
-    public double forwardOffSet = 5; //Distance from encoderX to center of bot
+    public double heading = 0;  //aka angle
+    public double forwardOffSet = 5; //Distance (INCHES) from encoderX to center of bot
 
 
     IMU imu = new IMU();
@@ -30,17 +31,26 @@ public class Odometry implements Runnable, Subsystem {
     public void initialize(LinearOpMode opMode) {
         encoderX = opMode.hardwareMap.dcMotor.get("encoderX");
         encoderY = opMode.hardwareMap.dcMotor.get("encoderY");
+
+        encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        encoderX.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        encoderY.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        lastEncoderYPos = encoderY.getCurrentPosition();
+        lastEncoderXPos = encoderX.getCurrentPosition();
     }
 
     public void update(){
         //Find change in encoder position
         double YEncoderChange = encoderY.getCurrentPosition() - lastEncoderYPos;
-        double XEncoderChange = encoderX.getCurrentPosition() - lastEncoderXPos;
+        double XEncoderChange = encoderX.getCurrentPosition()- lastEncoderXPos;
 
         //calculate angle
         double changeInAngle = imu.angle() - angle;
 
-        double horizontalDisplacement = XEncoderChange - forwardOffSet*changeInAngle;
+        double horizontalDisplacement = (XEncoderChange - forwardOffSet)*changeInAngle;
 
         //Find change in x and y position - ?
         double XChange = YEncoderChange * Math.cos(heading) + horizontalDisplacement * Math.sin(heading);
@@ -54,11 +64,16 @@ public class Odometry implements Runnable, Subsystem {
         lastEncoderYPos = encoderY.getCurrentPosition();
     }
 
-    @Override
+
+/*    @Override
     //run method has robot update odometry constantly
     public void run() {
         while(opMode.opModeIsActive()){
             update();
         }
     }
+*/
+
 }
+
+

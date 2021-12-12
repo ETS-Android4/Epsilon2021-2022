@@ -79,7 +79,7 @@ public class Drivetrain implements Subsystem {
         double EncoderCounts = inches;
         return EncoderCounts;
     }
-/*
+
     public void Move(double power, int inches, MoveType Type) {
         double EncoderCounts = INtoEC(inches);
         //Filler for setting Encoder Counts (this is for default motor encoders, not odo)
@@ -90,7 +90,7 @@ public class Drivetrain implements Subsystem {
         //POWAAAAA
         Power(power, Type);
     }
-*/
+
     /*******************
      * PID Stuff Woohoo
      ******************/
