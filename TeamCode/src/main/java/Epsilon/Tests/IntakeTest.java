@@ -23,6 +23,8 @@ public class IntakeTest extends LinearOpMode {
             boolean y = gamepad1.y;
             double speed = 0.5;
 
+            robot.intake.wheel.setPower(gamepad1.left_stick_y);
+
             if(x)
                 robot.intake.wheel.setPower(speed);
             else if(y)

@@ -59,8 +59,9 @@ public class Odometry implements Subsystem {
         heading = IMU.normalizeRadians(heading + changeInAngle);
 
         //Find change in x and y position - ?
-        double XChange = YEncoderChange * Math.cos(heading) + XEncoderChange * Math.sin(heading);
-        double YChange = YEncoderChange * Math.sin(heading) + XEncoderChange * Math.cos(heading);
+        //swapped XChange and YChange
+        double YChange = YEncoderChange * Math.cos(heading) + XEncoderChange * Math.sin(heading);
+        double XChange = YEncoderChange * Math.sin(heading) + XEncoderChange * Math.cos(heading);
 
         xPos += encoderToInch(XChange);
         yPos += encoderToInch(YChange);

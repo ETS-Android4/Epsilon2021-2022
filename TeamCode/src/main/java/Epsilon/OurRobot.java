@@ -29,7 +29,7 @@ public class OurRobot implements EpsilonRobot {
     public static Odometry Odometry = new Odometry();
     public static OpenCV OpenCV = new OpenCV();
 
-    private final Subsystem[] Subsystems = {imu, Odometry, intake};    //Array for all the subsystems
+    private final Subsystem[] Subsystems = {imu, Odometry, intake, drivetrain};    //Array for all the subsystems
 
     @Override
     // "initialize" method runs the "initialize" method in all the subsystems

@@ -17,7 +17,7 @@ public class EncoderTests extends LinearOpMode{
 
         waitForStart();
         while (opModeIsActive()){
-            telemetry.addData("Encoder Position", robot.Odometry.encoderX.getCurrentPosition());
+            telemetry.addData("Encoder Position", OurRobot.Odometry.encoderX.getCurrentPosition());
             telemetry.update();
         }
     }

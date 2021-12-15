@@ -145,12 +145,12 @@ public class Drivetrain implements Subsystem {
             double powerY = (kP*errorY) + (kI*integralSumY) + (kD*derivativeY);
 
             //Power(power, Type);
-/*
-            frontLeft.setPower(power);
-            backLeft.setPower(power);
-            frontRight.setPower(power);
-            backRight.setPower(power);
-*/
+
+            frontLeft.setPower(powerY+powerX);
+            backLeft.setPower(powerY-powerX);
+            frontRight.setPower(powerY-powerX);
+            backRight.setPower(powerY+powerX);
+
             lastErrorX = errorX;
             lastErrorY = errorY;
             timer.reset();
