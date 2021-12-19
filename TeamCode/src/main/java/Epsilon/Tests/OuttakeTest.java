@@ -24,12 +24,10 @@ public class OuttakeTest extends LinearOpMode {
             double horizontal = 0.0;
             double vertical = 0.0;
 
-            if(gamepad1.dpad_right) horizontal = 1.0;
-            if(gamepad1.dpad_left) horizontal = 0.0;
-            if(gamepad1.dpad_up) vertical = 1.0;
-            if(gamepad1.dpad_down) vertical = 0.0;
+            robot.outtake.bottom.setPower(gamepad1.left_stick_y);
+            robot.outtake.top.setPower(gamepad1.left_stick_x);
 
-            robot.outtake.extendo(horizontal, vertical, speed);
+            //robot.outtake.extendo(horizontal, vertical, speed);
 
 
         }
