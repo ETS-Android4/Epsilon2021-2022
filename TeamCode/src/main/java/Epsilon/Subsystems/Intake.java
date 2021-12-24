@@ -15,13 +15,14 @@ public class Intake implements Subsystem {
 
     public void initialize(LinearOpMode opMode) {
 
-        //wheel = opMode.hardwareMap.dcMotor.get("intake");
+        wheel = opMode.hardwareMap.dcMotor.get("wheel");
 
-        //wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+
     public void eat(int power, int rotations){
-        //wheel.setPower(power);
-        //wheel.setTargetPosition(rotations*TICKS_PER_ROTATION);
+        wheel.setPower(power);
+        wheel.setTargetPosition(rotations*TICKS_PER_ROTATION);
 
     }
 }

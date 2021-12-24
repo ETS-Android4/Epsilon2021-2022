@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+
+package Epsilon.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,7 +8,7 @@ import Epsilon.OurRobot;
 import Epsilon.Superclasses.EpsilonRobot;
 
 @TeleOp
-public class IntakeTest extends LinearOpMode {
+public class OuttakeTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -19,16 +20,16 @@ public class IntakeTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            boolean x = gamepad1.x;
-            boolean y = gamepad1.y;
             double speed = 0.5;
+            double horizontal = 0.0;
+            double vertical = 0.0;
 
-            if(x)
-                robot.intake.wheel.setPower(speed);
-            else if(y)
-                robot.intake.wheel.setPower(-speed);
-            else
-                robot.intake.wheel.setPower(0);
+            robot.outtake.bottom.setPower(gamepad1.left_stick_y);
+            robot.outtake.top.setPower(gamepad1.left_stick_x);
+
+            //robot.outtake.extendo(horizontal, vertical, speed);
+
+
         }
     }
 }

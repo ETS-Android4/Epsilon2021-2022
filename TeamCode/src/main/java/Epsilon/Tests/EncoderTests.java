@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import Epsilon.OurRobot;
-import Epsilon.Subsystems.Odometry;
+//import Epsilon.Subsystems.Odometry;
 
 @TeleOp
 public class EncoderTests extends LinearOpMode{
@@ -17,7 +17,7 @@ public class EncoderTests extends LinearOpMode{
 
         waitForStart();
         while (opModeIsActive()){
-            telemetry.addData("Encoder Position", robot.Odometry.encoderX.getCurrentPosition());
+            telemetry.addData("Encoder Position", OurRobot.Odometry.encoderX.getCurrentPosition());
             telemetry.update();
         }
     }

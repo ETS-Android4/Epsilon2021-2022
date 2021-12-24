@@ -52,9 +52,20 @@ public class IMU implements Subsystem {
         }
         return angle;
     }
+    public static double normalizeRadians(double angle) {
+        // returns the angle geometrically equivalent to the input angle but between -180 and 180
+        angle = angle % (2*Math.PI);
+        if (angle > Math.PI) {
+            angle -= (2*Math.PI);
+        }
+        if (angle < -Math.PI) {
+            angle += (2*Math.PI);
+        }
+        return angle;
+    }
+
     public void gyroTurn(double speed, double angle){
-        double error;
-        double steer;
+        double error, steer;
         double leftSpeed, rightSpeed;
         error = getError (angle);
         while (Math.abs(error) > HEADING_THRESHOLD) {

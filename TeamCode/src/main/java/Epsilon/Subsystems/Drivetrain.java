@@ -8,12 +8,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Base64;
 
+import Epsilon.OurRobot;
 import Epsilon.Superclasses.Subsystem;
 
 //Initializes all the motors/hardware for the drivetrain
 public class Drivetrain implements Subsystem {
 
-    Odometry odo = new Odometry();
+    Odometry odo = OurRobot.Odometry;
 
     public DcMotor frontLeft;
     public DcMotor frontRight;
@@ -79,7 +80,7 @@ public class Drivetrain implements Subsystem {
         double EncoderCounts = inches;
         return EncoderCounts;
     }
-/*
+
     public void Move(double power, int inches, MoveType Type) {
         double EncoderCounts = INtoEC(inches);
         //Filler for setting Encoder Counts (this is for default motor encoders, not odo)
@@ -90,16 +91,16 @@ public class Drivetrain implements Subsystem {
         //POWAAAAA
         Power(power, Type);
     }
-*/
+
     /*******************
      * PID Stuff Woohoo
      ******************/
 
     public void resetEncoderPos(){
-        odo.encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odo.encoderX.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        odo.encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odo.encoderY.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //odo.encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //odo.encoderX.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //odo.encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //odo.encoderY.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //might not even be necessary
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -120,13 +121,13 @@ public class Drivetrain implements Subsystem {
         double integralSumX = 0;
         double integralSumY = 0;
 
-        resetEncoderPos();
-
         ElapsedTime timer = new ElapsedTime();
         while (targetX - currentPosX > 0 || targetY - currentPosY > 0){
 
-            currentPosX = odo.encoderX.getCurrentPosition();
-            currentPosY = odo.encoderY.getCurrentPosition();
+            odo.update();
+
+            currentPosX = odo.xPos;
+            currentPosY = odo.yPos;
 
             //calculate the error
             double errorX = targetX - currentPosX;
@@ -136,7 +137,6 @@ public class Drivetrain implements Subsystem {
             double derivativeX = (errorX - lastErrorX) / timer.seconds();
             double derivativeY = (errorY - lastErrorY) / timer.seconds();
 
-
             //sum of all error over time
             integralSumX = integralSumX + (errorX*timer.seconds());
             integralSumY = integralSumY + (errorY*timer.seconds());
@@ -145,12 +145,12 @@ public class Drivetrain implements Subsystem {
             double powerY = (kP*errorY) + (kI*integralSumY) + (kD*derivativeY);
 
             //Power(power, Type);
-/*
-            frontLeft.setPower(power);
-            backLeft.setPower(power);
-            frontRight.setPower(power);
-            backRight.setPower(power);
-*/
+
+            frontLeft.setPower(powerY+powerX);
+            backLeft.setPower(powerY-powerX);
+            frontRight.setPower(powerY-powerX);
+            backRight.setPower(powerY+powerX);
+
             lastErrorX = errorX;
             lastErrorY = errorY;
             timer.reset();

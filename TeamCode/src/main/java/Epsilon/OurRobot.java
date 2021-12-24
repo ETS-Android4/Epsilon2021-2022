@@ -21,17 +21,16 @@ import Epsilon.Superclasses.Subsystem;
 public class OurRobot implements EpsilonRobot {
 
     //Creates instances of all the subsystem
-    public Drivetrain drivetrain = new Drivetrain();
-    public CarouselJank carousel = new CarouselJank();
-    public Intake intake = new Intake();
-    public IMU imu = new IMU();
-    public Outtake outtake = new Outtake();
-    public Odometry Odometry = new Odometry();
-    public OpenCV OpenCV = new OpenCV();
+    public static Drivetrain drivetrain = new Drivetrain();
+    public static CarouselJank carousel = new CarouselJank();
+    public static Intake intake = new Intake();
+    public static IMU imu = new IMU();
+    public static Outtake outtake = new Outtake();
+    public static Odometry Odometry = new Odometry();
+    public static OpenCV OpenCV = new OpenCV();
 
-    private final Subsystem[] Subsystems = {intake, drivetrain, imu, Odometry
-            //carousel
-    //        , carousel, intake, outtake
+    private final Subsystem[] Subsystems = {imu, outtake
+            //, Odometry, intake, drivetrain
     };    //Array for all the subsystems
 
     @Override

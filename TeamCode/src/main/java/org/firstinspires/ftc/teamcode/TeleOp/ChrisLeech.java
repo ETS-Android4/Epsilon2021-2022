@@ -20,6 +20,8 @@ public class ChrisLeech extends LinearOpMode{
         while (opModeIsActive()){
 
             boolean aButton = gamepad1.a;
+            telemetry.addData("A",aButton);
+            telemetry.update();
 
             if(aButton) {
                 robot.carousel.duckMotor.setPower(-0.5);
