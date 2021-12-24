@@ -20,6 +20,8 @@ import Epsilon.Superclasses.Subsystem;
 
 public class OpenCV implements Subsystem {
     LinearOpMode opMode;
+    OpenCvInternalCamera phoneCam;
+    Pipeline pipeline;
     @Override
     public void initialize(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -27,13 +29,17 @@ public class OpenCV implements Subsystem {
        // OpenCvCamera camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
 
 // Without live preview
-        OpenCvCamera camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK);
+        pipeline = new Pipeline();
+        phoneCam.setPipeline(pipeline);
+        phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
             @Override
             public void onError(int errorCode)
@@ -52,14 +58,15 @@ public class OpenCV implements Subsystem {
             CENTER,
             RIGHT
         }
+        final Scalar RED = new Scalar(255, 0, 0);
         final Scalar BLUE = new Scalar(0, 0, 255);
         final Scalar GREEN = new Scalar(0, 255, 0);
 
-        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(109,98);
-        final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(181,98);
-        final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(253,98);
-        final int REGION_WIDTH = 20;
-        final int REGION_HEIGHT = 20;
+        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,70);
+        final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(130,70);
+        final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(270,70);
+        final int REGION_WIDTH = 30;
+        final int REGION_HEIGHT = 30;
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
                 REGION1_TOPLEFT_ANCHOR_POINT.y);
@@ -84,12 +91,10 @@ public class OpenCV implements Subsystem {
         int avg1, avg2, avg3;
         public static ObjectPos position = ObjectPos.LEFT;
 
-        void inputToCb(Mat input)
-        {
+        void inputToCb(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cb, 2);
         }
-
         @Override
         public void init(Mat firstFrame)
         {
@@ -101,20 +106,42 @@ public class OpenCV implements Subsystem {
 
         @Override
         public Mat processFrame(Mat input) {
+            inputToCb(input);
             avg1 = (int) Core.mean(region1_Cb).val[0];
             avg2 = (int) Core.mean(region2_Cb).val[0];
             avg3 = (int) Core.mean(region3_Cb).val[0];
-            int maxOneTwo = Math.max(avg1, avg2);
-            int max = Math.max(maxOneTwo, avg3);
-            if(max == avg1){
+            Imgproc.rectangle(
+                    input,
+                    region1_pointA,
+                    region1_pointB,
+                    RED,
+                    2);
+
+            Imgproc.rectangle(
+                    input,
+                    region2_pointA,
+                    region2_pointB,
+                    GREEN,
+                    2);
+
+            Imgproc.rectangle(
+                    input,
+                    region3_pointA,
+                    region3_pointB,
+                    BLUE,
+                    2);
+            int minOneTwo = Math.min(avg1, avg2);
+            int min = Math.min(minOneTwo, avg3);
+            if (min == avg1) {
                 position = ObjectPos.LEFT;
-            } else if (max == avg2) {
+            } else if (min == avg2) {
                 position = ObjectPos.CENTER;
-            } else if (max == avg3) {
+            } else if (min == avg3) {
                 position = ObjectPos.RIGHT;
             }
             return input;
         }
+
         public static ObjectPos getAnalysis() {
             return position;
         }
