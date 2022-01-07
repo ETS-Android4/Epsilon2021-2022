@@ -11,9 +11,9 @@ import Epsilon.Superclasses.Subsystem;
 //Initializes all the motors/hardware for the drivetrain
 public class Outtake implements Subsystem {
 
-    public final double TICKS_PER_ROTATION = 300;       //this is not correct
-    double circumference = 1.0;                             //circumference in inches
-    public final double TICKS_PER_INCH = 145.1/circumference;      //temporary numbers lmao please fix later
+    public final double TICKS_PER_ROTATION = 357.7;       //this is correct
+    double circumference = 1.8897637795;                             //circumference in inches
+    public final double TICKS_PER_INCH = TICKS_PER_ROTATION/circumference;      //temporary numbers lmao please fix later
     public DcMotor top;
     public DcMotor bottom;
 
@@ -23,18 +23,15 @@ public class Outtake implements Subsystem {
 
         top.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bottom.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
     }
     public void extendo(double hDistance, double vDistance, double power){
         vertical(power,vDistance);
         horizontal(power,hDistance);
-
     }
     public void vertical(double power, double inches){
         power = Range.clip(power, -0.5, 0.5);
         top.setPower(power);
         top.setTargetPosition((int)(inches*TICKS_PER_INCH));
-
     }
     public void horizontal(double power, double inches){
         power = Range.clip(power, -0.5, 0.5);

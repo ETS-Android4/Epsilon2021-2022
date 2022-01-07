@@ -23,9 +23,8 @@ public class ChrisLeech extends LinearOpMode{
             telemetry.addData("A",aButton);
             telemetry.update();
 
-            if(aButton) {
+            if(aButton)
                 robot.carousel.duckMotor.setPower(-0.5);
-            }
             else
                 robot.carousel.duckMotor.setPower(0.0);
         }
