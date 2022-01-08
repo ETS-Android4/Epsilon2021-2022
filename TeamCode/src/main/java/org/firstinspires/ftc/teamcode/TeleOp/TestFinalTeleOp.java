@@ -23,18 +23,18 @@ public class TestFinalTeleOp extends LinearOpMode {
             double r = gamepad1.right_stick_x;
 
             boolean intake = gamepad2.a;
-            double outX = gamepad2.left_stick_x;
-            double outY = gamepad2.left_stick_y;
+            double outX = 5;
+            double outY = 90;
 
-            robot.drivetrain.frontLeft.setPower(y+r+x);
-            robot.drivetrain.frontRight.setPower(y-r-x);
-            robot.drivetrain.backLeft.setPower(y+r-x);
-            robot.drivetrain.backRight.setPower(y-r+x);
+            OurRobot.drivetrain.frontLeft.setPower(y+r+x);
+            OurRobot.drivetrain.frontRight.setPower(y-r-x);
+            OurRobot.drivetrain.backLeft.setPower(y+r-x);
+            OurRobot.drivetrain.backRight.setPower(y-r+x);
 
-            if(intake) robot.intake.eat(1,1);
+            if(intake) OurRobot.intake.eat(1,1);
 
-            robot.outtake.vertical(0.1,1);
-            robot.outtake.horizontal(0.1,1);
+            OurRobot.outtake.top.setPower(outY);
+            OurRobot.outtake.bottom.setPosition(outX);
 
             OurRobot.Odometry.update();
             telemetry.addData("XPosition", OurRobot.Odometry.xPos);
