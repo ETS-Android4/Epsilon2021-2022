@@ -88,6 +88,12 @@ public class Drivetrain implements Subsystem {
 
     public void Move(double power, int inches, MoveType Type) {
         double EncoderCounts = INtoEC(inches);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         frontLeft.setTargetPosition((int) EncoderCounts);
         frontRight.setTargetPosition((int) EncoderCounts);
         backLeft.setTargetPosition((int) EncoderCounts);
