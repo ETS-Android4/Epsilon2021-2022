@@ -38,7 +38,7 @@ public class IMU implements Subsystem {
         imu.initialize(parameters);
         //while IMU is not calibrated
         while (opMode.opModeIsActive() && !imu.isGyroCalibrated());
-        lastIMUReading = imu.getAngularOrientation().firstAngle;
+        lastIMUReading = imu.getAngularOrientation().secondAngle;
     }
 
     public static double normalize(double angle) {

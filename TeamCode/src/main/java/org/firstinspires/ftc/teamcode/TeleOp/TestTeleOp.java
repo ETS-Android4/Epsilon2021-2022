@@ -27,11 +27,11 @@ public class TestTeleOp extends LinearOpMode {
            robot.drivetrain.backLeft.setPower(y+r-x);
            robot.drivetrain.backRight.setPower(y-r+x);
 
-           OurRobot.Odometry.update();
-           telemetry.addData("XPosition", OurRobot.Odometry.xPos);
-           telemetry.addData("YPosition", OurRobot.Odometry.yPos);
-           telemetry.addData("Angle", Math.toDegrees(OurRobot.Odometry.heading));
-           telemetry.update();
+           //OurRobot.Odometry.update();
+           //telemetry.addData("XPosition", OurRobot.Odometry.xPos);
+           //telemetry.addData("YPosition", OurRobot.Odometry.yPos);
+           //telemetry.addData("Angle", Math.toDegrees(OurRobot.Odometry.heading));
+           // telemetry.update();
         }
     }
 }

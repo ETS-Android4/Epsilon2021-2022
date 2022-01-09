@@ -61,15 +61,15 @@ public class Drivetrain implements Subsystem {
                 backRight.setPower(power);
                 break;
             case STRAFE:
-                frontLeft.setPower(-1 * power);
+                frontLeft.setPower(-power);
                 frontRight.setPower(power);
                 backLeft.setPower(power);
-                backRight.setPower(-1 * power);
+                backRight.setPower(-power);
                 break;
             case TURN:
-                frontLeft.setPower(-1 * power);
+                frontLeft.setPower(-power);
                 frontRight.setPower(power);
-                backLeft.setPower(-1 * power);
+                backLeft.setPower(-power);
                 backRight.setPower(power);
                 break;
         }
@@ -85,12 +85,16 @@ public class Drivetrain implements Subsystem {
 
     public void Move(double power, int inches, MoveType Type) {
         double EncoderCounts = INtoEC(inches);
-        //Filler for setting Encoder Counts (this is for default motor encoders, not odo)
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         frontLeft.setTargetPosition((int) EncoderCounts);
         frontRight.setTargetPosition((int) EncoderCounts);
         backLeft.setTargetPosition((int) EncoderCounts);
         backRight.setTargetPosition((int) EncoderCounts);
-        //POWAAAAA
         Power(power, Type);
     }
 
