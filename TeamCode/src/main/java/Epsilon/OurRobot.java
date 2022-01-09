@@ -29,8 +29,14 @@ public class OurRobot implements EpsilonRobot {
     public static Odometry Odometry = new Odometry();
     public static OpenCV OpenCV = new OpenCV();
 
-    private final Subsystem[] Subsystems = {outtake //drivetrain
-            //, Odometry, intake, outtake
+    private final Subsystem[] Subsystems = {
+            outtake
+            //drivetrain,
+            //intake,
+            //imu,
+            //Odometry,
+            //OpenCV,
+            //CarouselJank
     };    //Array for all the subsystems
 
     @Override

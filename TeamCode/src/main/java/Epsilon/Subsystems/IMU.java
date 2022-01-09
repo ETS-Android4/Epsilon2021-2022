@@ -83,7 +83,7 @@ public class IMU implements Subsystem {
         double angleError;
         Orientation orientation = imu.getAngularOrientation(
                 AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        angleError = targetAngle - orientation.thirdAngle;
+        angleError = targetAngle - orientation.secondAngle;         //changed from third angle to second angle
         normalize(angleError);
         return angleError;
     }
@@ -101,7 +101,7 @@ public class IMU implements Subsystem {
     }
 
     public void update() {
-        double newAngle = imu.getAngularOrientation().firstAngle;
+        double newAngle = imu.getAngularOrientation().secondAngle;      //changed from first angle to second angle
         angle += normalize(newAngle - lastIMUReading);
         lastIMUReading = newAngle;
     }
