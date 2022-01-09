@@ -53,11 +53,6 @@ public class OpenCV implements Subsystem {
     }
     public static class Pipeline extends OpenCvPipeline {
         //https://github.com/OpenFTC/EasyOpenCV/blob/master/examples/src/main/java/org/firstinspires/ftc/teamcode/SkystoneDeterminationExample.java
-        public enum ObjectPos {
-            LEFT,
-            CENTER,
-            RIGHT
-        }
         final Scalar RED = new Scalar(255, 0, 0);
         final Scalar BLUE = new Scalar(0, 0, 255);
         final Scalar GREEN = new Scalar(0, 255, 0);
@@ -89,7 +84,7 @@ public class OpenCV implements Subsystem {
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
         int avg1, avg2, avg3;
-        public static ObjectPos position = ObjectPos.LEFT;
+        public static Outtake.posASH position = Outtake.posASH.TOP;
 
         void inputToCb(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
@@ -133,16 +128,16 @@ public class OpenCV implements Subsystem {
             int minOneTwo = Math.min(avg1, avg2);
             int min = Math.min(minOneTwo, avg3);
             if (min == avg1) {
-                position = ObjectPos.LEFT;
+                position = Outtake.posASH.BOTTOM;
             } else if (min == avg2) {
-                position = ObjectPos.CENTER;
+                position = Outtake.posASH.MID;
             } else if (min == avg3) {
-                position = ObjectPos.RIGHT;
+                position = Outtake.posASH.TOP;
             }
             return input;
         }
 
-        public static ObjectPos getAnalysis() {
+        public static Outtake.posASH getAnalysis() {
             return position;
         }
     }

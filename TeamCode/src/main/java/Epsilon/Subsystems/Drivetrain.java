@@ -75,9 +75,11 @@ public class Drivetrain implements Subsystem {
         }
     }
 
-    public double INtoEC(double inches) {       //Hey Jacob I changed from int to double
+    public double INtoEC(double inches) {
         //Inches to Encoder Counts Stuff
-        double EncoderCounts = inches;
+        //(537 ticks / 1 rev) * (1 rev / 96pi mm) * (1 mm / x in)
+        double COUNTS_PER_INCH = 45.2;
+        double EncoderCounts = inches * COUNTS_PER_INCH;
         return EncoderCounts;
     }
 
@@ -110,7 +112,7 @@ public class Drivetrain implements Subsystem {
     }
 
     //Basic PID method for linear/lateral movement
-    public void Move(double inchesX, double inchesY, MoveType Type){
+    public void Move(double inchesX, double inchesY){
 
         double targetX = INtoEC(inchesX);
         double targetY = INtoEC(inchesY);
