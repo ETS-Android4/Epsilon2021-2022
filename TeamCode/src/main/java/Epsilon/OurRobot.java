@@ -18,7 +18,7 @@ import Epsilon.Superclasses.Subsystem;
 //"OurRobot" class creates instances of all the subsystem
 //This class also contains most of the methods we'll use in auto
 
-public class OurRobot implements EpsilonRobot {
+public class OurRobot {
 
     //Creates instances of all the subsystem
     public static Drivetrain drivetrain = new Drivetrain();
@@ -29,8 +29,8 @@ public class OurRobot implements EpsilonRobot {
     public static Odometry Odometry = new Odometry();
     public static OpenCV OpenCV = new OpenCV();
 
-    private final Subsystem[] Subsystems = {
-            outtake
+    private static final Subsystem[] Subsystems = {
+            outtake,
             //drivetrain,
             //intake,
             //imu,
@@ -39,12 +39,14 @@ public class OurRobot implements EpsilonRobot {
             //CarouselJank
     };    //Array for all the subsystems
 
-    @Override
+
     // "initialize" method runs the "initialize" method in all the subsystems
     // Essentially declares/initializes all the motors and stuff
-    public void initialize(LinearOpMode opMode) {
-        for (Subsystem x : Subsystems){
-            x.initialize(opMode);
+    public static void initialize(LinearOpMode opMode) {
+        opMode.telemetry.addLine("Hi");
+        opMode.telemetry.update();
+        for (int i = 0; i<Subsystems.length; i++){
+            Subsystems[i].initialize(opMode);
         }
     }
 

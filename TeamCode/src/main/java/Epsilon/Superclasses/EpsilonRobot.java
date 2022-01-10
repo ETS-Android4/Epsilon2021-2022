@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public interface EpsilonRobot{
-    public abstract void initialize(LinearOpMode opMode);
+    public static void initialize(LinearOpMode opMode){}
 }
 
 /*

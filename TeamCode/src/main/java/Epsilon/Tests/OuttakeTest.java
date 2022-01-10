@@ -14,8 +14,8 @@ public class OuttakeTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException{
 
 
-        OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
-        robot.initialize(this);
+        //OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
+        OurRobot.initialize(this);
         double power = 0.6;
         waitForStart();
 

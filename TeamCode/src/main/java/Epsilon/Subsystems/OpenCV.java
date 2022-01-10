@@ -14,8 +14,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-import java.nio.channels.Pipe;
-
 import Epsilon.Superclasses.Subsystem;
 
 public class OpenCV implements Subsystem {
@@ -84,7 +82,7 @@ public class OpenCV implements Subsystem {
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
         int avg1, avg2, avg3;
-        public static Outtake.posASH position = Outtake.posASH.TOP;
+        public static Outtake.PosASH position = Outtake.PosASH.TOP;
 
         void inputToCb(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
@@ -128,16 +126,16 @@ public class OpenCV implements Subsystem {
             int minOneTwo = Math.min(avg1, avg2);
             int min = Math.min(minOneTwo, avg3);
             if (min == avg1) {
-                position = Outtake.posASH.BOTTOM;
+                position = Outtake.PosASH.BOTTOM;
             } else if (min == avg2) {
-                position = Outtake.posASH.MID;
+                position = Outtake.PosASH.MID;
             } else if (min == avg3) {
-                position = Outtake.posASH.TOP;
+                position = Outtake.PosASH.TOP;
             }
             return input;
         }
 
-        public static Outtake.posASH getAnalysis() {
+        public static Outtake.PosASH getAnalysis() {
             return position;
         }
     }

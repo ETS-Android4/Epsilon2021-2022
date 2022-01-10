@@ -1,9 +1,7 @@
 package Epsilon.Subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -37,16 +35,16 @@ public class Outtake implements Subsystem {
         degrees = Range.clip(degrees, 90, 135);
         bottom.setPosition(degrees);
     }
-    public enum posASH {
+    public enum PosASH {
         TOP,
         MID,
         BOTTOM
     }
-    public void scoreASH(posASH pos) {
-        if (pos == posASH.BOTTOM) {
+    public void scoreASH(PosASH pos) {
+        if (pos == PosASH.BOTTOM) {
             extendo(150, 3, 0.75);
             extendo(150, 3, -0.75);
-        } else if (pos == posASH.MID) {
+        } else if (pos == PosASH.MID) {
             extendo(150, 8, 0.75);
             extendo(150, 8, -0.75);
         } else {
