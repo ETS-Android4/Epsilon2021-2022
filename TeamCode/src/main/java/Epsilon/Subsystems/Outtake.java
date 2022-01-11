@@ -22,12 +22,19 @@ public class Outtake implements Subsystem {
 
         top.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+    public double PID(double targetPos) {
+        double kP = 0.05;
+        double power;
+        double error = targetPos - top.getCurrentPosition();
+        power = error * kP;
+        return power;
+    }
     public void extendo(double degrees, double vDistance, double power){
         vertical(power,vDistance);
         horizontal(degrees);
     }
     public void vertical(double power, double inches){
-        power = Range.clip(power, -0.5, 0.5);
+        power = Range.clip(power, -0.3, 0.3);
         top.setPower(power);
         top.setTargetPosition((int)(inches*TICKS_PER_INCH));
     }

@@ -31,9 +31,9 @@ public class OurRobot {
 
     private static final Subsystem[] Subsystems = {
             outtake,
-            //drivetrain,
-            //intake,
-            //imu,
+            drivetrain,
+            intake,
+            imu,
             //Odometry,
             //OpenCV,
             //CarouselJank

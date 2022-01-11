@@ -24,13 +24,14 @@ public class IntakeTest extends LinearOpMode {
             double speed = 0.5;
 
             robot.intake.wheel.setPower(gamepad1.left_stick_y);
-
+/*
             if(x)
                 robot.intake.wheel.setPower(speed);
             else if(y)
                 robot.intake.wheel.setPower(-speed);
             else
                 robot.intake.wheel.setPower(0);
+                */
         }
     }
 }

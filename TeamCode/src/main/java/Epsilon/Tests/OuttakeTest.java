@@ -18,18 +18,23 @@ public class OuttakeTest extends LinearOpMode {
         OurRobot.initialize(this);
         double power = 0.6;
         waitForStart();
+        double position = OurRobot.outtake.top.getCurrentPosition();
+        while (opModeIsActive()) {
+            double currentjoystick = gamepad1.right_stick_y;
+            if (currentjoystick == 0) {
+                OurRobot.outtake.top.setPower(OurRobot.outtake.PID(position));
+            } else {
+                OurRobot.outtake.top.setPower(gamepad1.right_stick_y);
+                position = OurRobot.outtake.top.getCurrentPosition();
+            }
+            telemetry.addData("encoder counts", OurRobot.outtake.top.getCurrentPosition());
+            telemetry.addData("Joystick value", gamepad1.right_stick_y);
+            telemetry.addData("position", position);
 
-        while (opModeIsActive()){
-            if(gamepad1.y && gamepad1.right_bumper)
-                OurRobot.outtake.top.setPower(-0.6);
-            if(gamepad1.y)
-                OurRobot.outtake.top.setPower(0.6);
             if(gamepad1.x)
                 OurRobot.outtake.bottom.setPosition(0);//PLACEHOLDER VALUE
-            if(gamepad1.b)
+            else if(gamepad1.b)
                 OurRobot.outtake.bottom.setPosition(1);//PLACEHOLDER VALUE
-            else
-                OurRobot.outtake.top.setPower(0.0);
 
             telemetry.addData("servo", OurRobot.outtake.bottom.getPosition());
             telemetry.addData("b", gamepad1.b);
