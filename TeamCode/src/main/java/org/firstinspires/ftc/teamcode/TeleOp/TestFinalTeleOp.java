@@ -44,9 +44,9 @@ public class TestFinalTeleOp extends LinearOpMode {
 
             OurRobot.outtake.top.setPower(gamepad2.left_stick_y);
             if(gamepad1.a)
-                OurRobot.intake.wheel.setPower(-0.7);
+                OurRobot.intake.wheel.setPower(-1);
             else if (gamepad1.b)
-                OurRobot.intake.wheel.setPower(0.7);
+                OurRobot.intake.wheel.setPower(1);
             else
                 OurRobot.intake.wheel.setPower(0.0);
 
@@ -65,7 +65,6 @@ public class TestFinalTeleOp extends LinearOpMode {
                 OurRobot.outtake.scoreASH(Outtake.PosASH.BOTTOM);
             else{
                 OurRobot.outtake.top.setPower(OurRobot.outtake.PID(verticalPosition));
-                verticalPosition = OurRobot.outtake.top.getCurrentPosition();
             }
 
           /*  OurRobot.Odometry.update();

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import Epsilon.OurRobot;
 import Epsilon.Superclasses.Subsystem;
 
 public class IMU implements Subsystem {
@@ -38,7 +39,7 @@ public class IMU implements Subsystem {
         imu.initialize(parameters);
         //while IMU is not calibrated
         while (opMode.opModeIsActive() && !imu.isGyroCalibrated());
-        lastIMUReading = imu.getAngularOrientation().secondAngle;
+        lastIMUReading = imu.getAngularOrientation().firstAngle;
     }
 
     public static double normalize(double angle) {
@@ -83,7 +84,7 @@ public class IMU implements Subsystem {
         double angleError;
         Orientation orientation = imu.getAngularOrientation(
                 AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        angleError = targetAngle - orientation.secondAngle;         //changed from third angle to second angle
+        angleError = targetAngle - orientation.firstAngle;
         normalize(angleError);
         return angleError;
     }
@@ -97,11 +98,11 @@ public class IMU implements Subsystem {
     }
 
     public double angle() {
-        return angle + zero;
+        return imu.getAngularOrientation().firstAngle + zero;
     }
 
     public void update() {
-        double newAngle = imu.getAngularOrientation().secondAngle;      //changed from first angle to second angle
+        double newAngle = imu.getAngularOrientation().firstAngle;      //changed from first angle to second angle
         angle += normalize(newAngle - lastIMUReading);
         lastIMUReading = newAngle;
     }
