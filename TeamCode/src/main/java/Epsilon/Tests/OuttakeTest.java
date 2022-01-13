@@ -17,28 +17,35 @@ public class OuttakeTest extends LinearOpMode {
         //OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
         OurRobot.initialize(this);
         double power = 0.6;
+        double servoPosition = 0.2;
+        double verticalPosition = OurRobot.outtake.top.getCurrentPosition();
         waitForStart();
-        double position = OurRobot.outtake.top.getCurrentPosition();
-        while (opModeIsActive()) {
-            double currentjoystick = gamepad1.right_stick_y;
-            if (currentjoystick == 0) {
-                OurRobot.outtake.top.setPower(OurRobot.outtake.PID(position));
-            } else {
-                OurRobot.outtake.top.setPower(gamepad1.right_stick_y);
-                position = OurRobot.outtake.top.getCurrentPosition();
-            }
-            telemetry.addData("encoder counts", OurRobot.outtake.top.getCurrentPosition());
-            telemetry.addData("Joystick value", gamepad1.right_stick_y);
-            telemetry.addData("position", position);
 
-            if(gamepad1.x)
-                OurRobot.outtake.bottom.setPosition(0);//PLACEHOLDER VALUE
-            else if(gamepad1.b)
-                OurRobot.outtake.bottom.setPosition(1);//PLACEHOLDER VALUE
+        OurRobot.outtake.bottom.setPosition(0.2);
 
-            telemetry.addData("servo", OurRobot.outtake.bottom.getPosition());
-            telemetry.addData("b", gamepad1.b);
-            telemetry.addData("x", gamepad1.x);
+        while (opModeIsActive()){
+
+            if(gamepad1.dpad_up) {
+                OurRobot.outtake.top.setPower(power);
+                verticalPosition = OurRobot.outtake.top.getCurrentPosition();
+            } else if(gamepad1.dpad_down) {
+                OurRobot.outtake.top.setPower(-power/2);
+                verticalPosition = OurRobot.outtake.top.getCurrentPosition();
+            } else
+                OurRobot.outtake.top.setPower(OurRobot.outtake.PID(verticalPosition));
+
+                if (gamepad1.dpad_left && OurRobot.outtake.top.getCurrentPosition() > 300) {
+                    servoPosition = 0.6;
+                    OurRobot.outtake.bottom.setPosition(servoPosition);//PLACEHOLDER VALUE
+                } else if (gamepad1.dpad_right) {
+                    servoPosition = 0;
+                    OurRobot.outtake.bottom.setPosition(servoPosition);//PLACEHOLDER VALUE
+                }
+            //else
+            //    OurRobot.outtake.top.setPower(0.0);
+
+            telemetry.addData("Horizontal Position", OurRobot.outtake.bottom.getPosition());
+            telemetry.addData("Vertical Position", OurRobot.outtake.top.getCurrentPosition());
             telemetry.update();
             /*
             double speed = 0.5;

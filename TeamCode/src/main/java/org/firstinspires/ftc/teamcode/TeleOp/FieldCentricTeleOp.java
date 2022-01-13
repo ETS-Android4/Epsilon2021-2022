@@ -74,6 +74,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 speed = 0.7;
 
             OurRobot.outtake.top.setPower(gamepad2.left_stick_y);
+
             if(gamepad1.a)
                 OurRobot.intake.wheel.setPower(-1);
             else if (gamepad1.b)
