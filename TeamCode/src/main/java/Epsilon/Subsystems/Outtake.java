@@ -16,57 +16,67 @@ public class Outtake implements Subsystem {
     public final double TICKS_PER_ROTATION = 357.7;       //this is correct
     double circumference = 1.8897637795;                             //circumference in inches
     public final double TICKS_PER_INCH = TICKS_PER_ROTATION/circumference;      //temporary numbers lmao please fix later
-    public DcMotor top;
-    public Servo bottom;
+    public final double ARM_EXTEND = 0.6;
+    public final double ARM_RETRACT = 0.0;
+    public final double ASH_BOTTOM = 411;
+    public final double ASH_MID = 625;
+    public final double ASH_TOP = 893;
+    public final double FLOOR = 300;
+
+    public DcMotor upMotor;
+    public Servo arm;
     public Servo door;
 
     public void initialize(LinearOpMode opMode) {
-        top = opMode.hardwareMap.dcMotor.get("top");
-        bottom = opMode.hardwareMap.servo.get("bottom");
+        upMotor = opMode.hardwareMap.dcMotor.get("top");
+        arm = opMode.hardwareMap.servo.get("bottom");
         door = opMode.hardwareMap.servo.get("door");
 
-        top.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        upMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public double PID(double targetPos) {
         double kP = 0.05;
         double power;
-        double error = targetPos - top.getCurrentPosition();
+        double error = targetPos - upMotor.getCurrentPosition();
         power = error * kP;
         return power;
     }
 
     public void extendo(double position, int verticalTicks, double power){
-        top.setTargetPosition(verticalTicks);
-        top.setPower(power);
+        upMotor.setTargetPosition(verticalTicks);
+        upMotor.setPower(power);
         Timer(1000);
-        bottom.setPosition(position);
+        arm.setPosition(position);
     }
-    public void door(){
+    public void openDoor(){
         door.setPosition(1.0);
-        Timer(1000);
+    }
+
+    public void closeDoor(){
         door.setPosition(0.0);
     }
 
     public void reset(){
-        bottom.setPosition(0.0);
+        arm.setPosition(0.0);
         Timer(1000);
-        top.setTargetPosition(350);
-        top.setPower(-0.3);
+        upMotor.setTargetPosition(350);
+        upMotor.setPower(-0.3);
     }
-    public void vertical(double power, double inches){
-        power = Range.clip(power, -0.3, 0.3);
-        top.setPower(power);
-        top.setTargetPosition((int)(inches*TICKS_PER_INCH));
+    public void setVertical(double power, double ticks){
+        power = Range.clip(power, -0.3, 0.6);
+        upMotor.setPower(power);
+        upMotor.setTargetPosition((int)(ticks));
     }
-    public void horizontal(double degrees) {
-        degrees = Range.clip(degrees, 0, 1);
-        bottom.setPosition(degrees);
+    public void setHorizontal(double position) {
+        position = Range.clip(position, 0, 1);
+        arm.setPosition(position);
     }
     public enum PosASH {
         TOP,
         MID,
         BOTTOM
     }
+
     public void scoreASH(PosASH pos){
         if (pos == PosASH.BOTTOM) {
             extendo(0.6, 411, 0.5);

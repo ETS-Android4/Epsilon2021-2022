@@ -18,34 +18,34 @@ public class OuttakeTest extends LinearOpMode {
         OurRobot.initialize(this);
         double power = 0.6;
         double servoPosition = 0.2;
-        double verticalPosition = OurRobot.outtake.top.getCurrentPosition();
+        double verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
         waitForStart();
 
-        OurRobot.outtake.bottom.setPosition(0.2);
+        OurRobot.outtake.arm.setPosition(0.2);
 
         while (opModeIsActive()){
 
             if(gamepad1.dpad_up) {
-                OurRobot.outtake.top.setPower(power);
-                verticalPosition = OurRobot.outtake.top.getCurrentPosition();
+                OurRobot.outtake.upMotor.setPower(power);
+                verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
             } else if(gamepad1.dpad_down) {
-                OurRobot.outtake.top.setPower(-power/2);
-                verticalPosition = OurRobot.outtake.top.getCurrentPosition();
+                OurRobot.outtake.upMotor.setPower(-power/2);
+                verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
             } else
-                OurRobot.outtake.top.setPower(OurRobot.outtake.PID(verticalPosition));
+                OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
 
-                if (gamepad1.dpad_left && OurRobot.outtake.top.getCurrentPosition() > 300) {
+                if (gamepad1.dpad_left && OurRobot.outtake.upMotor.getCurrentPosition() > 300) {
                     servoPosition = 0.6;
-                    OurRobot.outtake.bottom.setPosition(servoPosition);//PLACEHOLDER VALUE
+                    OurRobot.outtake.arm.setPosition(servoPosition);//PLACEHOLDER VALUE
                 } else if (gamepad1.dpad_right) {
                     servoPosition = 0;
-                    OurRobot.outtake.bottom.setPosition(servoPosition);//PLACEHOLDER VALUE
+                    OurRobot.outtake.arm.setPosition(servoPosition);//PLACEHOLDER VALUE
                 }
             //else
             //    OurRobot.outtake.top.setPower(0.0);
 
-            telemetry.addData("Horizontal Position", OurRobot.outtake.bottom.getPosition());
-            telemetry.addData("Vertical Position", OurRobot.outtake.top.getCurrentPosition());
+            telemetry.addData("Horizontal Position", OurRobot.outtake.arm.getPosition());
+            telemetry.addData("Vertical Position", OurRobot.outtake.upMotor.getCurrentPosition());
             telemetry.update();
             /*
             double speed = 0.5;

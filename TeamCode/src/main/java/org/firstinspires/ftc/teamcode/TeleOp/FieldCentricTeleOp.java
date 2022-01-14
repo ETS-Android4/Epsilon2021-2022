@@ -43,7 +43,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             //robot.imu.update();
             double angle = OurRobot.imu.imu.getAngularOrientation().firstAngle;
 
-            double verticalPosition = OurRobot.outtake.top.getCurrentPosition();
+            double verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
 
             telemetry.addData("zero", robot.imu.zero());
             telemetry.addData("angle", angle);
@@ -73,7 +73,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             else
                 speed = 0.7;
 
-            OurRobot.outtake.top.setPower(gamepad2.left_stick_y);
+            OurRobot.outtake.upMotor.setPower(gamepad2.left_stick_y);
 
             if(gamepad1.a)
                 OurRobot.intake.wheel.setPower(-1);
@@ -83,11 +83,11 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 OurRobot.intake.wheel.setPower(0.0);
 
             if (gamepad2.dpad_up)
-                OurRobot.outtake.vertical(0.7,0.5);
+                OurRobot.outtake.setVertical(0.7,0.5);
             else if (gamepad2.dpad_down)
-                OurRobot.outtake.vertical(-0.7,0.5);
+                OurRobot.outtake.setVertical(-0.7,0.5);
             else if (gamepad2.dpad_left)
-                OurRobot.outtake.horizontal(outY);
+                OurRobot.outtake.setHorizontal(outY);
 
             if (gamepad2.x)
                 OurRobot.outtake.scoreASH(Outtake.PosASH.TOP);
@@ -96,8 +96,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
             else if (gamepad2.a)
                 OurRobot.outtake.scoreASH(Outtake.PosASH.BOTTOM);
             else{
-                OurRobot.outtake.top.setPower(OurRobot.outtake.PID(verticalPosition));
-                verticalPosition = OurRobot.outtake.top.getCurrentPosition();
+                OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+                verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
             }
         }
     }
