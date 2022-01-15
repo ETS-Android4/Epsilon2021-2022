@@ -135,6 +135,12 @@ public class TestFinalTeleOp extends LinearOpMode {
             else if(gamepad2.left_bumper)
                 OurRobot.outtake.openDoor();
 
+            if(gamepad1.dpad_left)
+                OurRobot.carousel.duckMotor.setPower(0.5);
+            else if(gamepad1.dpad_right)
+                OurRobot.carousel.duckMotor.setPower(-0.5);
+            else
+                OurRobot.carousel.duckMotor.setPower(0.0);
 
             telemetry.addData("Horizontal",OurRobot.outtake.arm.getPosition());
             telemetry.addData("Vertical",OurRobot.outtake.upMotor.getCurrentPosition());
