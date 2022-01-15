@@ -33,7 +33,7 @@ public class OurRobot {
             outtake,
             drivetrain,
             intake,
-            imu,
+            imu
             //Odometry,
             //OpenCV,
             //CarouselJank
