@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import Epsilon.OurRobot;
 import Epsilon.Subsystems.Drivetrain;
@@ -13,18 +14,27 @@ public class AutEpsilonTM extends LinearOpMode {
     OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
     @Override
     public void runOpMode() throws InterruptedException {
+        robot.initialize(this);
+        waitForStart();
+
         //robot.drivetrain.Move(1, 5, Drivetrain.MoveType.DRIVE);
         //robot.imu.gyroTurn(0.25, 90);
        //robot.drivetrain.Move(1, -5. Drivetrain.MoveType.DRIVE);
-        robot.drivetrain.Move(1,18, Drivetrain.MoveType.DRIVE);
-        robot.carousel.spin(1,360);
-        robot.drivetrain.Move(1, -72, Drivetrain.MoveType.DRIVE);
+        robot.drivetrain.Move(0.5,-15, Drivetrain.MoveType.DRIVE);
+        robot.drivetrain.Move(0.5, 34, Drivetrain.MoveType.STRAFE);
+        robot.drivetrain.Move(0.5, 13, Drivetrain.MoveType.DRIVE);
+        robot.wait(2000);
+        robot.carousel.duckMotor.setPower(0.5);
+        robot.wait(5000);
+        robot.carousel.duckMotor.setPower(0.0);
+        robot.drivetrain.Move(0.5, -23, Drivetrain.MoveType.DRIVE);
+
 /*
-        //ASSUMING Y = front -> back, X = left -> right
+        //ASSUMING Y = front -> back, X = left -> righ
 
         //Scan Duck or Cool Team Game Element
         robot.OpenCV.initialize(this);
-        Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
+        Outtake.PosASH3a scorePos = OpenCV.Pipeline.getAnalysis();
 
         //Carousel
         for(int i = 0; i < 1; i++) {

@@ -67,11 +67,11 @@ public class TestFinalTeleOp extends LinearOpMode {
              * Intake *
              **********/
             if(gamepad1.right_bumper)
-                wheelSpeed = 0.5;
+                wheelSpeed = 0.75;
 
-            if(gamepad1.a)
+            if(gamepad1.left_bumper)
                 OurRobot.intake.wheel.setPower(-wheelSpeed);
-            else if (gamepad1.b)
+            else if (gamepad1.right_bumper)
                 OurRobot.intake.wheel.setPower(wheelSpeed);
             else
                 OurRobot.intake.wheel.setPower(0.0);
@@ -145,24 +145,31 @@ public class TestFinalTeleOp extends LinearOpMode {
             /*******************
              * Door and Toggle *
              ******************/
+            /*
+            boolean currentRightBumper = gamepad2.right_bumper;
             //If statement to confirm that the bumper really changed values between while loops
-            if (gamepad2.right_bumper && !lastBumperState){
+            if (currentRightBumper && !lastBumperState){
                 doorToggle = !doorToggle;
-                lastBumperState = gamepad2.right_bumper;
             }
+            lastBumperState = currentRightBumper;
 
             if (doorToggle) {
                 OurRobot.outtake.closeDoor();
             } else if(!doorToggle) {
                 OurRobot.outtake.openDoor();
             }
+            */
+            if (gamepad2.right_bumper)
+                OurRobot.outtake.openDoor();
+            else
+                OurRobot.outtake.closeDoor();
 
             /************
              * Carousel *
              ***********/
-            if(gamepad1.dpad_left)
+            if(gamepad1.x)
                 OurRobot.carousel.duckMotor.setPower(0.5);
-            else if(gamepad1.dpad_right)
+            else if(gamepad1.y)
                 OurRobot.carousel.duckMotor.setPower(-0.5);
             else
                 OurRobot.carousel.duckMotor.setPower(0.0);

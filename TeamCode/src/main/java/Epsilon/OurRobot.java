@@ -4,6 +4,7 @@ import android.graphics.Path;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import Epsilon.Subsystems.Drivetrain;
 import Epsilon.Subsystems.CarouselJank;
@@ -33,10 +34,10 @@ public class OurRobot {
             outtake,
             drivetrain,
             intake,
-            imu
+            imu,
             //Odometry,
             //OpenCV,
-            //CarouselJank
+            carousel
     };    //Array for all the subsystems
 
 
@@ -50,5 +51,11 @@ public class OurRobot {
         }
     }
 
+    public static void wait(int milliseconds){
+        ElapsedTime time = new ElapsedTime();
+        while(time.milliseconds() < milliseconds){
+
+        }
+    }
 
 }

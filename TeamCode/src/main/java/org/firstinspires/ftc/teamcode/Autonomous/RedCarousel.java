@@ -14,6 +14,17 @@ public class RedCarousel extends LinearOpMode {
     public void runOpMode() throws InterruptedException{
         OurRobot.initialize(this);
 
+        waitForStart();
+
+        OurRobot.drivetrain.Move(0.5, -8, Drivetrain.MoveType.STRAFE);
+        OurRobot.drivetrain.Move(0.5,29, Drivetrain.MoveType.DRIVE);
+        OurRobot.wait(2000);
+        OurRobot.carousel.duckMotor.setPower(-0.5);
+        OurRobot.wait(5000);
+        OurRobot.carousel.duckMotor.setPower(0.0);
+        OurRobot.drivetrain.Move(0.5,-22, Drivetrain.MoveType.STRAFE);
+
+        /*
         Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
 
         //Strafes right to shipping hub, turns 180, and pre loads
@@ -27,5 +38,7 @@ public class RedCarousel extends LinearOpMode {
         OurRobot.drivetrain.Move(1, 20, Drivetrain.MoveType.STRAFE);
         OurRobot.carousel.spin(1, 3);
         OurRobot.drivetrain.Move(1, 5, Drivetrain.MoveType.DRIVE);
+
+         */
     }
 }

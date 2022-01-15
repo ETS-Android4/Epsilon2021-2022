@@ -14,6 +14,11 @@ public class RedWarehouse extends LinearOpMode {
     public void runOpMode() throws InterruptedException{
         OurRobot.initialize(this);
 
+        waitForStart();
+
+        OurRobot.drivetrain.Move(0.5,45, Drivetrain.MoveType.DRIVE);
+
+        /*
         Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
 
         //Strafes left to shipping hub, turns 180, and pre loads
@@ -25,6 +30,8 @@ public class RedWarehouse extends LinearOpMode {
         OurRobot.drivetrain.Move(1, 8, Drivetrain.MoveType.DRIVE);
         OurRobot.imu.gyroTurn(0.5, -90);
         OurRobot.drivetrain.Move(1, 10, Drivetrain.MoveType.DRIVE);
+
+         */
     }
 
 }

@@ -26,7 +26,6 @@ public class CarouselJank implements Subsystem {
 
     public void spin(int power, int rotations){
         duckMotor.setPower(power);
-        duckMotor.setTargetPosition(rotations*TICKS_PER_ROTATION);
 
     }
 }

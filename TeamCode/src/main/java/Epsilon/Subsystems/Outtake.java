@@ -35,7 +35,7 @@ public class Outtake implements Subsystem {
         upMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public double PID(double targetPos) {
-        double kP = 0.05;
+        double kP = 0.04;
         double power;
         double error = targetPos - upMotor.getCurrentPosition();
         power = error * kP;

@@ -14,7 +14,7 @@ import Epsilon.Superclasses.Subsystem;
 //Initializes all the motors/hardware for the drivetrain
 public class Drivetrain implements Subsystem {
 
-    Odometry odo = OurRobot.Odometry;
+//    Odometry odo = OurRobot.Odometry;
 
     public DcMotor frontLeft;
     public DcMotor frontRight;
@@ -33,8 +33,8 @@ public class Drivetrain implements Subsystem {
         backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
         backRight = opMode.hardwareMap.dcMotor.get("backRight");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Run without encoders because we'll probably be using Odo encoders
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -52,27 +52,31 @@ public class Drivetrain implements Subsystem {
         STRAFE,
         TURN
     }
-    public void Power(double power, MoveType Type) {
+    public void TargetPos(double EncoderCounts, MoveType Type) {
         switch (Type) {
             case DRIVE:
-                frontLeft.setPower(power);
-                frontRight.setPower(power);
-                backLeft.setPower(power);
-                backRight.setPower(power);
+                frontLeft.setTargetPosition((int) EncoderCounts);
+                frontRight.setTargetPosition((int) EncoderCounts);
+                backLeft.setTargetPosition((int) EncoderCounts);
+                backRight.setTargetPosition((int) EncoderCounts);
                 break;
             case STRAFE:
-                frontLeft.setPower(-power);
-                frontRight.setPower(power);
-                backLeft.setPower(power);
-                backRight.setPower(-power);
+                frontLeft.setTargetPosition((int) -EncoderCounts);
+                frontRight.setTargetPosition((int) EncoderCounts);
+                backLeft.setTargetPosition((int) EncoderCounts);
+                backRight.setTargetPosition((int) -EncoderCounts);
                 break;
             case TURN:
-                frontLeft.setPower(-power);
-                frontRight.setPower(power);
-                backLeft.setPower(-power);
-                backRight.setPower(power);
+                frontLeft.setTargetPosition((int) -EncoderCounts);
+                frontRight.setTargetPosition((int) EncoderCounts);
+                backLeft.setTargetPosition((int) -EncoderCounts);
+                backRight.setTargetPosition((int) EncoderCounts);
                 break;
         }
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public double INtoEC(double inches) {
@@ -85,17 +89,19 @@ public class Drivetrain implements Subsystem {
 
     public void Move(double power, int inches, MoveType Type) {
         double EncoderCounts = INtoEC(inches);
+        TargetPos(EncoderCounts, Type);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setPower(power);
+        frontRight.setPower(power);
+        backLeft.setPower(power);
+        backRight.setPower(power);
+        while(frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy()) {
 
-        frontLeft.setTargetPosition((int) EncoderCounts);
-        frontRight.setTargetPosition((int) EncoderCounts);
-        backLeft.setTargetPosition((int) EncoderCounts);
-        backRight.setTargetPosition((int) EncoderCounts);
-        Power(power, Type);
+        }
     }
     /*******************
      * PID Stuff Woohoo
