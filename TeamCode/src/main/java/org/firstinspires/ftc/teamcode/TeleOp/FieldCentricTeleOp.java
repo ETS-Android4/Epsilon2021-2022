@@ -83,9 +83,9 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 OurRobot.intake.wheel.setPower(0.0);
 
             if (gamepad2.dpad_up)
-                OurRobot.outtake.setVertical(0.7,0.5);
+                OurRobot.outtake.setVertical(0.7,400);
             else if (gamepad2.dpad_down)
-                OurRobot.outtake.setVertical(-0.7,0.5);
+                OurRobot.outtake.setVertical(-0.7,400);
             else if (gamepad2.dpad_left)
                 OurRobot.outtake.setHorizontal(outY);
 

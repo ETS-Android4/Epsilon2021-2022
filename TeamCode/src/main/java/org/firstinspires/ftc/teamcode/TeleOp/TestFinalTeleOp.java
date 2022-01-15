@@ -35,7 +35,7 @@ public class TestFinalTeleOp extends LinearOpMode {
         double outtakeInitTime = time.milliseconds();
 
         OuttakeState outtakeState = OuttakeState.OUTTAKE_INIT;
-        double level = OurRobot.outtake.FLOOR;
+        int level = OurRobot.outtake.FLOOR;
 
         while (opModeIsActive()){
 
@@ -60,7 +60,8 @@ public class TestFinalTeleOp extends LinearOpMode {
                 speed = 0.7;
 
             OurRobot.outtake.upMotor.setPower(gamepad2.left_stick_y);
-            double wheelSpeed = 1.0;
+
+            double wheelSpeed = 0.9;
             if(gamepad1.right_bumper)
                 wheelSpeed = 0.5;
 
@@ -100,7 +101,9 @@ public class TestFinalTeleOp extends LinearOpMode {
                     break;
                 case VERTICAL_EXTEND:
                     outtakeInitTime = time.milliseconds();
-                    OurRobot.outtake.setVertical(0.6,level);
+                    //OurRobot.outtake.setVertical(0.6,level);
+                    OurRobot.outtake.upMotor.setPower(0.6);
+                    OurRobot.outtake.upMotor.setTargetPosition(level);
                     outtakeState = OuttakeState.HORIZONTAL_EXTEND;
                     break;
                 case HORIZONTAL_EXTEND:
@@ -124,10 +127,12 @@ public class TestFinalTeleOp extends LinearOpMode {
                 default:
                     outtakeState = OuttakeState.OUTTAKE_INIT;
             }
+            telemetry.addData("level",level);
+            telemetry.addData("outtake fsm",outtakeState);
 
-            if(gamepad2.right_bumper && gamepad2.b)
+            if(gamepad2.right_bumper)
                 OurRobot.outtake.closeDoor();
-            else if(gamepad2.b)
+            else if(gamepad2.left_bumper)
                 OurRobot.outtake.openDoor();
 
 

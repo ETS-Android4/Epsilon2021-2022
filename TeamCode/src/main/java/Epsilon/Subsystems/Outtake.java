@@ -18,10 +18,10 @@ public class Outtake implements Subsystem {
     public final double TICKS_PER_INCH = TICKS_PER_ROTATION/circumference;      //temporary numbers lmao please fix later
     public final double ARM_EXTEND = 0.6;
     public final double ARM_RETRACT = 0.0;
-    public final double ASH_BOTTOM = 411;
-    public final double ASH_MID = 625;
-    public final double ASH_TOP = 893;
-    public final double FLOOR = 300;
+    public final int ASH_BOTTOM = 300;
+    public final int ASH_MID = 600;
+    public final int ASH_TOP = 893;
+    public final int FLOOR = 20;
 
     public DcMotor upMotor;
     public Servo arm;
@@ -45,7 +45,6 @@ public class Outtake implements Subsystem {
     public void extendo(double position, int verticalTicks, double power){
         upMotor.setTargetPosition(verticalTicks);
         upMotor.setPower(power);
-        Timer(1000);
         arm.setPosition(position);
     }
     public void openDoor(){
@@ -58,14 +57,13 @@ public class Outtake implements Subsystem {
 
     public void reset(){
         arm.setPosition(0.0);
-        Timer(1000);
         upMotor.setTargetPosition(350);
         upMotor.setPower(-0.3);
     }
-    public void setVertical(double power, double ticks){
+    public void setVertical(double power, int ticks){
         power = Range.clip(power, -0.3, 0.6);
         upMotor.setPower(power);
-        upMotor.setTargetPosition((int)(ticks));
+        upMotor.setTargetPosition(ticks);
     }
     public void setHorizontal(double position) {
         position = Range.clip(position, 0, 1);
@@ -87,13 +85,8 @@ public class Outtake implements Subsystem {
         } else if (pos == PosASH.TOP){
             extendo(0.6, 893, 0.5);
         }
-        Timer(1000);
         reset();
     }
 
-    public void Timer(double milliseconds){
-        ElapsedTime time = new ElapsedTime();
-        while(time.milliseconds() < milliseconds){}
-    }
 
 }
