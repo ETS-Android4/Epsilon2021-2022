@@ -97,7 +97,6 @@ public class Drivetrain implements Subsystem {
         backRight.setTargetPosition((int) EncoderCounts);
         Power(power, Type);
     }
-
     /*******************
      * PID Stuff Woohoo
      ******************/
@@ -114,7 +113,7 @@ public class Drivetrain implements Subsystem {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-
+/*
     //Basic PID method for linear/lateral movement
     public void Move(double inchesX, double inchesY){
 
@@ -160,7 +159,5 @@ public class Drivetrain implements Subsystem {
             lastErrorX = errorX;
             lastErrorY = errorY;
             timer.reset();
-        }
+        }*/
     }
-
-}

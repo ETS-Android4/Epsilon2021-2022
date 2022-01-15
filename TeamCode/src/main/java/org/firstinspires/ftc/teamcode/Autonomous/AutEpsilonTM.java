@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import Epsilon.OurRobot;
+import Epsilon.Subsystems.Drivetrain;
 import Epsilon.Subsystems.OpenCV;
 import Epsilon.Subsystems.Outtake;
 
@@ -12,7 +13,13 @@ public class AutEpsilonTM extends LinearOpMode {
     OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
     @Override
     public void runOpMode() throws InterruptedException {
-
+        //robot.drivetrain.Move(1, 5, Drivetrain.MoveType.DRIVE);
+        //robot.imu.gyroTurn(0.25, 90);
+       //robot.drivetrain.Move(1, -5. Drivetrain.MoveType.DRIVE);
+        robot.drivetrain.Move(1,18, Drivetrain.MoveType.DRIVE);
+        robot.carousel.spin(1,360);
+        robot.drivetrain.Move(1, -72, Drivetrain.MoveType.DRIVE);
+/*
         //ASSUMING Y = front -> back, X = left -> right
 
         //Scan Duck or Cool Team Game Element
@@ -48,5 +55,6 @@ public class AutEpsilonTM extends LinearOpMode {
             robot.drivetrain.Move(0,-7);
             robot.drivetrain.Move(0,21);
         }
+ */
     }
 }
