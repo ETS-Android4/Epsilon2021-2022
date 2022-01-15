@@ -20,32 +20,36 @@ public class TestFinalTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
 
-        OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
-        robot.initialize(this);
+        //OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
+        OurRobot.initialize(this);
 
         double verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
 
         waitForStart();
 
         double speed = 0.7;
-
         ElapsedTime time = new ElapsedTime();
         boolean verticalActive = false;
         boolean horizontalActive = false;
+
+        boolean doorToggle = true;
+        boolean lastBumperState = false;
+
         double outtakeInitTime = time.milliseconds();
+        double wheelSpeed = 0.9;
 
         OuttakeState outtakeState = OuttakeState.OUTTAKE_INIT;
+
         int level = OurRobot.outtake.FLOOR;
 
         while (opModeIsActive()){
 
+            /*****************
+             * Drive Formula *
+             ****************/
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double r = gamepad1.right_stick_x;
-
-            //boolean intake = gamepad1.a;
-            double outY = 90;
-            //gamepad1.left_trigger;
 
             OurRobot.drivetrain.frontLeft.setPower(speed*(y-r-x));
             OurRobot.drivetrain.frontRight.setPower(speed*(y+r+x));
@@ -59,9 +63,9 @@ public class TestFinalTeleOp extends LinearOpMode {
             else
                 speed = 0.7;
 
-            OurRobot.outtake.upMotor.setPower(gamepad2.left_stick_y);
-
-            double wheelSpeed = 0.9;
+            /**********
+             * Intake *
+             **********/
             if(gamepad1.right_bumper)
                 wheelSpeed = 0.5;
 
@@ -72,6 +76,10 @@ public class TestFinalTeleOp extends LinearOpMode {
             else
                 OurRobot.intake.wheel.setPower(0.0);
 
+            /***********
+             * Outtake *
+             **********/
+            //dpad control of the linear slides
             if(gamepad2.dpad_up) {
                 OurRobot.outtake.upMotor.setPower(0.85);
                 verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
@@ -87,17 +95,21 @@ public class TestFinalTeleOp extends LinearOpMode {
                 OurRobot.outtake.arm.setPosition(0);
             }
 
+            /************************
+             * Finite State Machine *
+             ***********************/
             switch (outtakeState){
                 case OUTTAKE_INIT:
-                    if(gamepad2.x || gamepad2.y || gamepad2.b) {
-                        outtakeState = OuttakeState.VERTICAL_EXTEND;
-                        if (gamepad2.x)
+                        if (gamepad2.x) {
                             level = OurRobot.outtake.ASH_TOP;
-                        else if (gamepad2.a)
+                            outtakeState = OuttakeState.VERTICAL_EXTEND;
+                        } else if (gamepad2.a) {
                             level = OurRobot.outtake.ASH_MID;
-                        else if (gamepad2.y)
+                            outtakeState = OuttakeState.VERTICAL_EXTEND;
+                        } else if (gamepad2.y) {
                             level = OurRobot.outtake.ASH_BOTTOM;
-                    }
+                            outtakeState = OuttakeState.VERTICAL_EXTEND;
+                        }
                     break;
                 case VERTICAL_EXTEND:
                     outtakeInitTime = time.milliseconds();
@@ -130,11 +142,24 @@ public class TestFinalTeleOp extends LinearOpMode {
             telemetry.addData("level",level);
             telemetry.addData("outtake fsm",outtakeState);
 
-            if(gamepad2.right_bumper)
-                OurRobot.outtake.closeDoor();
-            else if(gamepad2.left_bumper)
-                OurRobot.outtake.openDoor();
+            /*******************
+             * Door and Toggle *
+             ******************/
+            //If statement to confirm that the bumper really changed values between while loops
+            if (gamepad2.right_bumper && !lastBumperState){
+                doorToggle = !doorToggle;
+                lastBumperState = gamepad2.right_bumper;
+            }
 
+            if (doorToggle) {
+                OurRobot.outtake.closeDoor();
+            } else if(!doorToggle) {
+                OurRobot.outtake.openDoor();
+            }
+
+            /************
+             * Carousel *
+             ***********/
             if(gamepad1.dpad_left)
                 OurRobot.carousel.duckMotor.setPower(0.5);
             else if(gamepad1.dpad_right)
@@ -142,6 +167,7 @@ public class TestFinalTeleOp extends LinearOpMode {
             else
                 OurRobot.carousel.duckMotor.setPower(0.0);
 
+            telemetry.addData("Door Toggle", doorToggle);
             telemetry.addData("Horizontal",OurRobot.outtake.arm.getPosition());
             telemetry.addData("Vertical",OurRobot.outtake.upMotor.getCurrentPosition());
             telemetry.update();
