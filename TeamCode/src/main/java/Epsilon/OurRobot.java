@@ -36,7 +36,7 @@ public class OurRobot {
             intake,
             imu,
             //Odometry,
-            //OpenCV,
+            OpenCV,
             carousel
     };    //Array for all the subsystems
 

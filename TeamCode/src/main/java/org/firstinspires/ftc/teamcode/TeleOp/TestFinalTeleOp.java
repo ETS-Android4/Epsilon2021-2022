@@ -47,9 +47,9 @@ public class TestFinalTeleOp extends LinearOpMode {
             /*****************
              * Drive Formula *
              ****************/
-            double y = gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x;
-            double r = gamepad1.right_stick_x;
+            double y = -gamepad1.left_stick_y;
+            double x = -gamepad1.left_stick_x;
+            double r = -gamepad1.right_stick_x;
 
             OurRobot.drivetrain.frontLeft.setPower(speed*(y-r-x));
             OurRobot.drivetrain.frontRight.setPower(speed*(y+r+x));

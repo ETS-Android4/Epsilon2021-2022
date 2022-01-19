@@ -37,7 +37,7 @@ public class OpenCV implements Subsystem {
             @Override
             public void onOpened()
             {
-                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                phoneCam.startStreaming(320, 176, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
             @Override
             public void onError(int errorCode)
@@ -55,9 +55,9 @@ public class OpenCV implements Subsystem {
         final Scalar BLUE = new Scalar(0, 0, 255);
         final Scalar GREEN = new Scalar(0, 255, 0);
 
-        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,70);
-        final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(130,70);
-        final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(270,70);
+        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,100);
+        final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(150,100);
+        final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(290,100);
         final int REGION_WIDTH = 30;
         final int REGION_HEIGHT = 30;
         Point region1_pointA = new Point(
