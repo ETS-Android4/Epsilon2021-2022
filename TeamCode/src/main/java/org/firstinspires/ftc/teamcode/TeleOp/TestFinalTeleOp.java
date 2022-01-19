@@ -76,63 +76,93 @@ public class TestFinalTeleOp extends LinearOpMode {
             else
                 OurRobot.intake.wheel.setPower(0.0);
 
-            /***********
-             * Outtake *
-             **********/
-            //dpad control of the linear slides
-            if(gamepad2.dpad_up) {
-                OurRobot.outtake.upMotor.setPower(0.85);
-                verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-            } else if(gamepad2.dpad_down) {
-                OurRobot.outtake.upMotor.setPower(-0.3);
-                verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-            } else
-                OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
-
-            if (gamepad2.dpad_left && OurRobot.outtake.upMotor.getCurrentPosition() > 300) {
-                OurRobot.outtake.arm.setPosition(0.6);
-            } else if (gamepad2.dpad_right) {
-                OurRobot.outtake.arm.setPosition(0);
-            }
-
-            /************************
-             * Finite State Machine *
-             ***********************/
+            /********************************
+             * Outtake Finite State Machine *
+             *******************************/
             switch (outtakeState){
                 case OUTTAKE_INIT:
-                        if (gamepad2.x) {
-                            level = OurRobot.outtake.ASH_TOP;
-                            outtakeState = OuttakeState.VERTICAL_EXTEND;
-                        } else if (gamepad2.a) {
-                            level = OurRobot.outtake.ASH_MID;
-                            outtakeState = OuttakeState.VERTICAL_EXTEND;
-                        } else if (gamepad2.y) {
-                            level = OurRobot.outtake.ASH_BOTTOM;
-                            outtakeState = OuttakeState.VERTICAL_EXTEND;
-                        }
+
+                    //dpad control of the linear slides
+                    if (gamepad2.dpad_up) {
+                        OurRobot.outtake.upMotor.setPower(0.85);
+                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
+                    } else if (gamepad2.dpad_down) {
+                        OurRobot.outtake.upMotor.setPower(-0.3);
+                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
+                    }
+
+                    //dpad control of the horizontal servo
+                    if (gamepad2.dpad_left && OurRobot.outtake.upMotor.getCurrentPosition() > 300) {
+                        OurRobot.outtake.arm.setPosition(0.6);
+                    } else if (gamepad2.dpad_right) {
+                        OurRobot.outtake.arm.setPosition(0);
+                    }
+
+                    //automation
+                    if (gamepad2.x) {
+                        level = OurRobot.outtake.ASH_TOP;
+
+                        outtakeInitTime = time.milliseconds();
+
+                        outtakeState = OuttakeState.VERTICAL_EXTEND;
+
+                    } else if (gamepad2.a) {
+                        level = OurRobot.outtake.ASH_MID;
+
+                        outtakeInitTime = time.milliseconds();
+
+                        outtakeState = OuttakeState.VERTICAL_EXTEND;
+
+                    } else if (gamepad2.y) {
+                        level = OurRobot.outtake.ASH_BOTTOM;
+
+                        outtakeInitTime = time.milliseconds();
+
+                        outtakeState = OuttakeState.VERTICAL_EXTEND;
+
+                    } else
+                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+
+
                     break;
                 case VERTICAL_EXTEND:
-                    outtakeInitTime = time.milliseconds();
-                    //OurRobot.outtake.setVertical(0.6,level);
-                    OurRobot.outtake.upMotor.setPower(0.6);
-                    OurRobot.outtake.upMotor.setTargetPosition(level);
-                    outtakeState = OuttakeState.HORIZONTAL_EXTEND;
+
+                        //OurRobot.outtake.setVertical(0.6,level);
+                        OurRobot.outtake.upMotor.setPower(0.6);
+                        OurRobot.outtake.upMotor.setTargetPosition(level);
+
+                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
+                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+
+                        outtakeState = OuttakeState.HORIZONTAL_EXTEND;
+
                     break;
                 case HORIZONTAL_EXTEND:
                     if(time.milliseconds() > outtakeInitTime + 2000) {
                         OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_EXTEND);
+
+                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
+                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+
                         outtakeState = OuttakeState.HORIZONTAL_RETRACT;
                     }
                     break;
                 case HORIZONTAL_RETRACT:
-                    if(time.milliseconds() > outtakeInitTime + 4000) {
+                    if(time.milliseconds() > outtakeInitTime + 6000) {
                         OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_RETRACT);
+
+                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
+                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+
                         outtakeState = OuttakeState.VERTICAL_RETRACT;
                     }
                     break;
                 case VERTICAL_RETRACT:
-                    if(time.milliseconds() > outtakeInitTime + 6000) {
+                    if(time.milliseconds() > outtakeInitTime + 8000) {
                         OurRobot.outtake.setVertical(0.6, OurRobot.outtake.FLOOR);
+
+                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+
                         outtakeState = OuttakeState.OUTTAKE_INIT;
                     }
                     break;

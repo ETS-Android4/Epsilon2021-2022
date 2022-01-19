@@ -14,7 +14,19 @@ public class BlueCarousel extends LinearOpMode {
     public void runOpMode() throws InterruptedException{
         OurRobot.initialize(this);
         waitForStart();
-        OurRobot.drivetrain.Move(0.5,-15, Drivetrain.MoveType.DRIVE);
+
+        //scan
+        Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
+        //drive to ASH
+        OurRobot.drivetrain.Move(0.5, 15, Drivetrain.MoveType.STRAFE);
+        OurRobot.drivetrain.Move(0.2, -9, Drivetrain.MoveType.DRIVE);
+
+        //score
+        OurRobot.outtake.scoreASH(scorePos);
+
+        //drive back, go to carousel
+        OurRobot.drivetrain.Move(0.2, 9, Drivetrain.MoveType.DRIVE);
+        //OurRobot.drivetrain.Move(0.5,-15, Drivetrain.MoveType.DRIVE);
         OurRobot.drivetrain.Move(0.5, 34, Drivetrain.MoveType.STRAFE);
         OurRobot.drivetrain.Move(0.5, 13, Drivetrain.MoveType.DRIVE);
         OurRobot.wait(2000);
