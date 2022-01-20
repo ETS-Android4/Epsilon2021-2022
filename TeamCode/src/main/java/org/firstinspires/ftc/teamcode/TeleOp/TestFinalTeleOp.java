@@ -15,6 +15,8 @@ public class TestFinalTeleOp extends LinearOpMode {
         OUTTAKE_INIT,
         VERTICAL_EXTEND,
         HORIZONTAL_EXTEND,
+        DOOR_OPEN,
+        DOOR_CLOSE,
         VERTICAL_RETRACT,
         HORIZONTAL_RETRACT,
         OUTTAKE_END
@@ -133,49 +135,64 @@ public class TestFinalTeleOp extends LinearOpMode {
 
                     break;
                 case VERTICAL_EXTEND:
+                    /*
                         if(OurRobot.outtake.upMotor.getCurrentPosition() > level)
                             outtakeFSMSpeed = -0.6;
                         else
                             outtakeFSMSpeed = 0.6;
+
+                     */
                         //OurRobot.outtake.setVertical(0.6,level);
-                        OurRobot.outtake.upMotor.setPower(outtakeFSMSpeed);
-                        OurRobot.outtake.upMotor.setTargetPosition(level);
+                        //OurRobot.outtake.upMotor.setPower(outtakeFSMSpeed);
+                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
 
                         outtakeState = OuttakeState.HORIZONTAL_EXTEND;
 
                     break;
                 case HORIZONTAL_EXTEND:
-                    if(OurRobot.outtake.upMotor.getCurrentPosition() > level-10){
-                        telemetry.addData("sex","sex");
-                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
-                    }
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
                     if(time.milliseconds() > outtakeInitTime + 2000) {
                         OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_EXTEND);
+                        outtakeState = OuttakeState.DOOR_OPEN;
+                    }
+                    break;
+                case DOOR_OPEN:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
+                    if(time.milliseconds() > outtakeInitTime + 4000) {
+                        OurRobot.outtake.openDoor();
+                        outtakeState = OuttakeState.DOOR_CLOSE;
+                    }
+                    break;
+                case DOOR_CLOSE:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
+                    if(time.milliseconds() > outtakeInitTime + 6000) {
+                        OurRobot.outtake.closeDoor();
                         outtakeState = OuttakeState.HORIZONTAL_RETRACT;
                     }
                     break;
                 case HORIZONTAL_RETRACT:
-                    verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
-                    if(time.milliseconds() > outtakeInitTime + 4000) {
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
+
+                    if(time.milliseconds() > outtakeInitTime + 8000) {
                         OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_RETRACT);
 
                         outtakeState = OuttakeState.VERTICAL_RETRACT;
                     }
 
                     break;
-                case VERTICAL_RETRACT:
-                    verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
 
-                    if(time.milliseconds() > outtakeInitTime + 6000) {
-                        OurRobot.outtake.setVertical(-0.6, OurRobot.outtake.FLOOR);
+                case VERTICAL_RETRACT:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
+
+                    if(time.milliseconds() > outtakeInitTime + 10000) {
+                        level = OurRobot.outtake.FLOOR;
                         outtakeState = OuttakeState.OUTTAKE_END;
                     }
                     break;
                 case OUTTAKE_END:
-                    if(time.milliseconds() > outtakeInitTime + 8000) {
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
+
+                    if(time.milliseconds() > outtakeInitTime + 12000) {
                         verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
                         outtakeState = OuttakeState.OUTTAKE_INIT;
                     }
@@ -203,10 +220,12 @@ public class TestFinalTeleOp extends LinearOpMode {
                 OurRobot.outtake.openDoor();
             }
             */
-            if (gamepad2.right_bumper)
-                OurRobot.outtake.openDoor();
-            else
-                OurRobot.outtake.closeDoor();
+            if(outtakeState==OuttakeState.OUTTAKE_INIT) {
+                if (gamepad2.right_bumper)
+                    OurRobot.outtake.openDoor();
+                else
+                    OurRobot.outtake.closeDoor();
+            }
 
             /************
              * Carousel *

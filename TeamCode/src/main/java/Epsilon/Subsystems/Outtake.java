@@ -2,12 +2,17 @@ package Epsilon.Subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import static Epsilon.Subsystems.Outtake.OuttakeState.VERTICAL_EXTEND;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.TeleOp.TestFinalTeleOp;
+
+import Epsilon.OurRobot;
 import Epsilon.Superclasses.Subsystem;
 
 //Initializes all the motors/hardware for the drivetrain
@@ -77,15 +82,106 @@ public class Outtake implements Subsystem {
 
     public void scoreASH(PosASH pos){
         if (pos == PosASH.BOTTOM) {
-            extendo(0.6, 411, 0.5);
-
+            extend(ASH_BOTTOM);
         } else if (pos == PosASH.MID) {
-            extendo(0.6, 625, 0.5);
-
+            extend(ASH_MID);
         } else if (pos == PosASH.TOP){
-            extendo(0.6, 893, 0.5);
+            extend(ASH_TOP);
         }
-        reset();
+        //reset();
+    }
+
+    public enum OuttakeState{
+        OUTTAKE_INIT,
+        VERTICAL_EXTEND,
+        HORIZONTAL_EXTEND,
+        DOOR_OPEN,
+        DOOR_CLOSE,
+        VERTICAL_RETRACT,
+        HORIZONTAL_RETRACT,
+        OUTTAKE_END
+    }
+
+    public void extend(int ashLevel){
+        ElapsedTime time = new ElapsedTime();
+        boolean complete = false;
+
+        int level = 0;
+
+        OuttakeState outtakeState = OuttakeState.OUTTAKE_INIT;
+
+        double outtakeInitTime = time.milliseconds();
+
+        while(!complete){
+            switch (outtakeState){
+                case OUTTAKE_INIT:
+                    outtakeState = VERTICAL_EXTEND;
+                    break;
+                case VERTICAL_EXTEND:
+                    /*
+                        if(OurRobot.outtake.upMotor.getCurrentPosition() > level)
+                            outtakeFSMSpeed = -0.6;
+                        else
+                            outtakeFSMSpeed = 0.6;
+
+                     */
+                    //OurRobot.outtake.setVertical(0.6,level);
+                    //OurRobot.outtake.upMotor.setPower(outtakeFSMSpeed);
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
+
+                    outtakeState = OuttakeState.HORIZONTAL_EXTEND;
+
+                    break;
+                case HORIZONTAL_EXTEND:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
+                    if(time.milliseconds() > outtakeInitTime + 2000) {
+                        OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_EXTEND);
+                        outtakeState = OuttakeState.DOOR_OPEN;
+                    }
+                    break;
+                case DOOR_OPEN:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
+                    if(time.milliseconds() > outtakeInitTime + 4000) {
+                        OurRobot.outtake.openDoor();
+                        outtakeState = OuttakeState.DOOR_CLOSE;
+                    }
+                    break;
+                case DOOR_CLOSE:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
+                    if(time.milliseconds() > outtakeInitTime + 6000) {
+                        OurRobot.outtake.closeDoor();
+                        outtakeState = OuttakeState.HORIZONTAL_RETRACT;
+                    }
+                    break;
+                case HORIZONTAL_RETRACT:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
+
+                    if(time.milliseconds() > outtakeInitTime + 8000) {
+                        OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_RETRACT);
+
+                        outtakeState = OuttakeState.VERTICAL_RETRACT;
+                    }
+
+                    break;
+
+                case VERTICAL_RETRACT:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
+
+                    if(time.milliseconds() > outtakeInitTime + 10000) {
+                        outtakeState = OuttakeState.OUTTAKE_END;
+                    }
+                    break;
+                case OUTTAKE_END:
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(FLOOR));
+
+                    if(time.milliseconds() > outtakeInitTime + 12000) {
+                        complete = true;
+                    }
+                    break;
+                default:
+                    outtakeState = OuttakeState.OUTTAKE_INIT;
+            }
+        }
     }
 
 
