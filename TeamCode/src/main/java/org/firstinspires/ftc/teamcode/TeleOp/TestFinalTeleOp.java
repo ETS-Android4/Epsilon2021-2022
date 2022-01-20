@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import Epsilon.OurRobot;
@@ -15,7 +16,8 @@ public class TestFinalTeleOp extends LinearOpMode {
         VERTICAL_EXTEND,
         HORIZONTAL_EXTEND,
         VERTICAL_RETRACT,
-        HORIZONTAL_RETRACT
+        HORIZONTAL_RETRACT,
+        OUTTAKE_END
     }
     @Override
     public void runOpMode() throws InterruptedException{
@@ -23,11 +25,15 @@ public class TestFinalTeleOp extends LinearOpMode {
         //OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
         OurRobot.initialize(this);
 
+
         double verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
 
         waitForStart();
 
-        double speed = 0.7;
+        double speed = -0.7;
+        double outtakeFSMSpeed = 0.6;
+
+
         ElapsedTime time = new ElapsedTime();
         boolean verticalActive = false;
         boolean horizontalActive = false;
@@ -47,9 +53,9 @@ public class TestFinalTeleOp extends LinearOpMode {
             /*****************
              * Drive Formula *
              ****************/
-            double y = gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x;
-            double r = gamepad1.right_stick_x;
+            double y = -gamepad1.left_stick_y;
+            double x = -gamepad1.left_stick_x;
+            double r = -gamepad1.right_stick_x;
 
             OurRobot.drivetrain.frontLeft.setPower(speed*(y-r-x));
             OurRobot.drivetrain.frontRight.setPower(speed*(y+r+x));
@@ -66,15 +72,17 @@ public class TestFinalTeleOp extends LinearOpMode {
             /**********
              * Intake *
              **********/
-            if(gamepad1.right_bumper)
-                wheelSpeed = 0.75;
+            //if(gamepad1.right_bumper)
+                //wheelSpeed = 0.75;
 
             if(gamepad1.left_bumper)
                 OurRobot.intake.wheel.setPower(-wheelSpeed);
-            else if (gamepad1.right_bumper)
+            else if (gamepad1.right_bumper) {
+                wheelSpeed = 0.75;
                 OurRobot.intake.wheel.setPower(wheelSpeed);
-            else
+            }else
                 OurRobot.intake.wheel.setPower(0.0);
+
 
             /********************************
              * Outtake Finite State Machine *
@@ -89,10 +97,11 @@ public class TestFinalTeleOp extends LinearOpMode {
                     } else if (gamepad2.dpad_down) {
                         OurRobot.outtake.upMotor.setPower(-0.3);
                         verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-                    }
+                    } else
+                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
 
                     //dpad control of the horizontal servo
-                    if (gamepad2.dpad_left && OurRobot.outtake.upMotor.getCurrentPosition() > 300) {
+                    if (gamepad2.dpad_left) {
                         OurRobot.outtake.arm.setPosition(0.6);
                     } else if (gamepad2.dpad_right) {
                         OurRobot.outtake.arm.setPosition(0);
@@ -120,49 +129,54 @@ public class TestFinalTeleOp extends LinearOpMode {
 
                         outtakeState = OuttakeState.VERTICAL_EXTEND;
 
-                    } else
-                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
-
+                    }
 
                     break;
                 case VERTICAL_EXTEND:
-
+                        if(OurRobot.outtake.upMotor.getCurrentPosition() > level)
+                            outtakeFSMSpeed = -0.6;
+                        else
+                            outtakeFSMSpeed = 0.6;
                         //OurRobot.outtake.setVertical(0.6,level);
-                        OurRobot.outtake.upMotor.setPower(0.6);
+                        OurRobot.outtake.upMotor.setPower(outtakeFSMSpeed);
                         OurRobot.outtake.upMotor.setTargetPosition(level);
-
-                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
 
                         outtakeState = OuttakeState.HORIZONTAL_EXTEND;
 
                     break;
                 case HORIZONTAL_EXTEND:
-                    if(time.milliseconds() > outtakeInitTime + 2000) {
-                        OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_EXTEND);
-
+                    if(OurRobot.outtake.upMotor.getCurrentPosition() > level-10){
+                        telemetry.addData("sex","sex");
                         verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
                         OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
-
+                    }
+                    if(time.milliseconds() > outtakeInitTime + 2000) {
+                        OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_EXTEND);
                         outtakeState = OuttakeState.HORIZONTAL_RETRACT;
                     }
                     break;
                 case HORIZONTAL_RETRACT:
-                    if(time.milliseconds() > outtakeInitTime + 6000) {
+                    verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+                    if(time.milliseconds() > outtakeInitTime + 4000) {
                         OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_RETRACT);
-
-                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
-                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
 
                         outtakeState = OuttakeState.VERTICAL_RETRACT;
                     }
+
                     break;
                 case VERTICAL_RETRACT:
+                    verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
+                    OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
+
+                    if(time.milliseconds() > outtakeInitTime + 6000) {
+                        OurRobot.outtake.setVertical(-0.6, OurRobot.outtake.FLOOR);
+                        outtakeState = OuttakeState.OUTTAKE_END;
+                    }
+                    break;
+                case OUTTAKE_END:
                     if(time.milliseconds() > outtakeInitTime + 8000) {
-                        OurRobot.outtake.setVertical(0.6, OurRobot.outtake.FLOOR);
-
-                        OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(verticalPosition));
-
+                        verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
                         outtakeState = OuttakeState.OUTTAKE_INIT;
                     }
                     break;
@@ -197,6 +211,7 @@ public class TestFinalTeleOp extends LinearOpMode {
             /************
              * Carousel *
              ***********/
+
             if(gamepad1.x)
                 OurRobot.carousel.duckMotor.setPower(0.5);
             else if(gamepad1.y)
