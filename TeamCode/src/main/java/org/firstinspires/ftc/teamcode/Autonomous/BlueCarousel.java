@@ -10,13 +10,15 @@ import Epsilon.Subsystems.Outtake;
 
 @Autonomous
 public class BlueCarousel extends LinearOpMode {
-    public void runOpMode() throws InterruptedException{
+    public void runOpMode() throws InterruptedException {
         OurRobot.initialize(this);
-
+        Outtake.PosASH scorePos = Outtake.PosASH.TOP;
         //scan
-        Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
-        telemetry.addData("OpenCV Pos: ", scorePos);
-        telemetry.update();
+        while (!isStarted()) {
+            scorePos = OpenCV.Pipeline.getAnalysis();
+            telemetry.addData("OpenCV Pos: ", scorePos);
+            telemetry.update();
+        }
 
         waitForStart();
 

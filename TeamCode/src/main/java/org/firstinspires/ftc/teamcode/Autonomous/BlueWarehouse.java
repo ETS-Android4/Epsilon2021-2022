@@ -13,9 +13,26 @@ public class BlueWarehouse extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException{
         OurRobot.initialize(this);
+
+        Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
+        telemetry.addData("OpenCV Pos: ", scorePos);
+        telemetry.update();
+
         waitForStart();
 
-        OurRobot.drivetrain.Move(0.5,55, Drivetrain.MoveType.DRIVE, this);
+        //drive to ASH
+        OurRobot.drivetrain.Move(0.5, -29, Drivetrain.MoveType.STRAFE, this);
+        OurRobot.drivetrain.Move(0.5, -18, Drivetrain.MoveType.DRIVE, this);
+
+        //score ASH
+        OurRobot.outtake.scoreASH(scorePos);
+
+        //Move back and turn
+        OurRobot.drivetrain.Move(0.5, 9, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.3, 18, Drivetrain.MoveType.TURN, this);
+
+        //Drive into warehouse
+        OurRobot.drivetrain.Move(0.5,-55, Drivetrain.MoveType.DRIVE, this);
 
         /*
         Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();

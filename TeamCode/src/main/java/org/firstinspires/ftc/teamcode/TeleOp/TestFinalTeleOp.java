@@ -112,27 +112,17 @@ public class TestFinalTeleOp extends LinearOpMode {
                     //automation
                     if (gamepad2.x) {
                         level = OurRobot.outtake.ASH_TOP;
-
                         outtakeInitTime = time.milliseconds();
-
                         outtakeState = OuttakeState.VERTICAL_EXTEND;
-
                     } else if (gamepad2.a) {
                         level = OurRobot.outtake.ASH_MID;
-
                         outtakeInitTime = time.milliseconds();
-
                         outtakeState = OuttakeState.VERTICAL_EXTEND;
-
                     } else if (gamepad2.y) {
                         level = OurRobot.outtake.ASH_BOTTOM;
-
                         outtakeInitTime = time.milliseconds();
-
                         outtakeState = OuttakeState.VERTICAL_EXTEND;
-
                     }
-
                     break;
                 case VERTICAL_EXTEND:
                     /*
@@ -172,18 +162,13 @@ public class TestFinalTeleOp extends LinearOpMode {
                     break;
                 case HORIZONTAL_RETRACT:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
-
                     if(time.milliseconds() > outtakeInitTime + 8000) {
                         OurRobot.outtake.setHorizontal(OurRobot.outtake.ARM_RETRACT);
-
                         outtakeState = OuttakeState.VERTICAL_RETRACT;
                     }
-
                     break;
-
                 case VERTICAL_RETRACT:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
-
                     if(time.milliseconds() > outtakeInitTime + 10000) {
                         level = OurRobot.outtake.FLOOR;
                         outtakeState = OuttakeState.OUTTAKE_END;
@@ -191,7 +176,6 @@ public class TestFinalTeleOp extends LinearOpMode {
                     break;
                 case OUTTAKE_END:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
-
                     if(time.milliseconds() > outtakeInitTime + 12000) {
                         verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
                         outtakeState = OuttakeState.OUTTAKE_INIT;
