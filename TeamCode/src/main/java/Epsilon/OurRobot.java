@@ -51,11 +51,23 @@ public class OurRobot {
         }
     }
 
-    public static void wait(int milliseconds){
+    public static void wait(int milliseconds, LinearOpMode opMode){
         ElapsedTime time = new ElapsedTime();
-        while(time.milliseconds() < milliseconds){
+        while(time.milliseconds() < milliseconds && opMode.opModeIsActive()){
 
         }
     }
-
+    public static void CycleFreight(LinearOpMode opMode) {
+        drivetrain.Move(0.5, 7, Drivetrain.MoveType.DRIVE, opMode);
+        drivetrain.Move(0.5, -18, Drivetrain.MoveType.TURN, opMode);
+        drivetrain.Move(0.5,18, Drivetrain.MoveType.STRAFE,opMode);
+        drivetrain.Move(0.5,50, Drivetrain.MoveType.DRIVE,opMode);
+        intake.wheel.setPower(-1);
+        wait(5000, opMode);
+        drivetrain.Move(0.5,-50, Drivetrain.MoveType.DRIVE,opMode);
+        drivetrain.Move(0.5,-10, Drivetrain.MoveType.STRAFE,opMode);
+        drivetrain.Move(0.5, 18, Drivetrain.MoveType.TURN, opMode);
+        drivetrain.Move(0.5,-7, Drivetrain.MoveType.DRIVE,opMode);
+        outtake.scoreASH(Outtake.PosASH.TOP);
+    }
 }

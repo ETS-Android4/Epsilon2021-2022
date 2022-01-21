@@ -10,31 +10,37 @@ import Epsilon.Subsystems.Outtake;
 
 @Autonomous
 public class BlueCarousel extends LinearOpMode {
-
     public void runOpMode() throws InterruptedException{
         OurRobot.initialize(this);
-        waitForStart();
 
         //scan
         Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
+        telemetry.addData("OpenCV Pos: ", scorePos);
+        telemetry.update();
+
+        waitForStart();
+
         //drive to ASH
-        OurRobot.drivetrain.Move(0.5, 15, Drivetrain.MoveType.STRAFE);
-        OurRobot.drivetrain.Move(0.2, -9, Drivetrain.MoveType.DRIVE);
+        OurRobot.drivetrain.Move(0.5, -29, Drivetrain.MoveType.STRAFE, this);
+        OurRobot.drivetrain.Move(0.5, -18, Drivetrain.MoveType.DRIVE, this);
 
         //score
         OurRobot.outtake.scoreASH(scorePos);
 
-        //drive back, go to carousel
-        OurRobot.drivetrain.Move(0.2, 9, Drivetrain.MoveType.DRIVE);
-        //OurRobot.drivetrain.Move(0.5,-15, Drivetrain.MoveType.DRIVE);
-        OurRobot.drivetrain.Move(0.5, 34, Drivetrain.MoveType.STRAFE);
-        OurRobot.drivetrain.Move(0.5, 13, Drivetrain.MoveType.DRIVE);
-        OurRobot.wait(2000);
-        OurRobot.carousel.duckMotor.setPower(0.5);
-        OurRobot.wait(5000);
-        OurRobot.carousel.duckMotor.setPower(0.0);
-        OurRobot.drivetrain.Move(0.5, -23, Drivetrain.MoveType.DRIVE);
+        //OurRobot.CycleFreight(this);
 
+        //drive back, go to carousel
+        OurRobot.wait(500, this);
+        OurRobot.drivetrain.Move(0.5, 17, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.2, -5, Drivetrain.MoveType.DRIVE, this);
+        //OurRobot.drivetrain.Move(0.5,-15, Drivetrain.MoveType.DRIVE);
+        OurRobot.drivetrain.Move(0.5, 58, Drivetrain.MoveType.STRAFE, this);
+
+        OurRobot.carousel.duckMotor.setPower(0.5);
+        OurRobot.wait(5000, this);
+        OurRobot.carousel.duckMotor.setPower(0.0);
+
+        OurRobot.drivetrain.Move(0.5, -20, Drivetrain.MoveType.DRIVE, this);
         /*
         Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
 

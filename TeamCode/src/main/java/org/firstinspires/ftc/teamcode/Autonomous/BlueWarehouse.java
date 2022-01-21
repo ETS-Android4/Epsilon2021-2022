@@ -15,7 +15,7 @@ public class BlueWarehouse extends LinearOpMode {
         OurRobot.initialize(this);
         waitForStart();
 
-        OurRobot.drivetrain.Move(0.5,55, Drivetrain.MoveType.DRIVE);
+        OurRobot.drivetrain.Move(0.5,55, Drivetrain.MoveType.DRIVE, this);
 
         /*
         Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();

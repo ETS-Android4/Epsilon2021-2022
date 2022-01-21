@@ -87,7 +87,7 @@ public class Drivetrain implements Subsystem {
         return EncoderCounts;
     }
 
-    public void Move(double power, int inches, MoveType Type) {
+    public void Move(double power, int inches, MoveType Type, LinearOpMode opMode) {
         double EncoderCounts = INtoEC(inches);
         TargetPos(EncoderCounts, Type);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -99,7 +99,7 @@ public class Drivetrain implements Subsystem {
         frontRight.setPower(power);
         backLeft.setPower(power);
         backRight.setPower(power);
-        while(frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy()) {
+        while(frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy() && opMode.opModeIsActive()) {
 
         }
     }

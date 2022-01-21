@@ -12,6 +12,7 @@ import Epsilon.Subsystems.Outtake;
 public class RedCarousel extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException{
+/*
         OurRobot.initialize(this);
 
         waitForStart();
