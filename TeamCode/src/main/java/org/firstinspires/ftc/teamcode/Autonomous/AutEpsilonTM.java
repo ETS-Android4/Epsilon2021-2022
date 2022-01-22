@@ -15,6 +15,12 @@ public class AutEpsilonTM extends LinearOpMode {
     OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
     @Override
     public void runOpMode() throws InterruptedException {
+        OurRobot.initialize(this);
+
+        waitForStart();
+
+        OurRobot.imu.gyroTurn(0.5,90, this);
+
         /*
         robot.initialize(this);
         Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();

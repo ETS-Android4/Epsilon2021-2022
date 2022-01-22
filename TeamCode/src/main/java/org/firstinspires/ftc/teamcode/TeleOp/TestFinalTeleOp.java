@@ -222,6 +222,13 @@ public class TestFinalTeleOp extends LinearOpMode {
             else
                 OurRobot.carousel.duckMotor.setPower(0.0);
 
+            /***********
+             * Capper *
+             **********/
+
+            OurRobot.capper.tapeExtender.setPower(gamepad2.right_stick_y);
+            //OurRobot.capper.pivot.setPower(gamepad2.right_trigger);
+
             telemetry.addData("Door Toggle", doorToggle);
             telemetry.addData("Horizontal",OurRobot.outtake.arm.getPosition());
             telemetry.addData("Vertical",OurRobot.outtake.upMotor.getCurrentPosition());

@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import Epsilon.Subsystems.Drivetrain;
 import Epsilon.Subsystems.CarouselJank;
 import Epsilon.Subsystems.Intake;
+import Epsilon.Subsystems.NoCap;
 import Epsilon.Subsystems.Odometry;
 import Epsilon.Subsystems.OpenCV;
 import Epsilon.Subsystems.Outtake;
@@ -29,6 +30,7 @@ public class OurRobot {
     public static Outtake outtake = new Outtake();
     public static Odometry Odometry = new Odometry();
     public static OpenCV OpenCV = new OpenCV();
+    public static NoCap capper = new NoCap();
 
     private static final Subsystem[] Subsystems = {
             outtake,
@@ -37,7 +39,8 @@ public class OurRobot {
             imu,
             //Odometry,
             OpenCV,
-            carousel
+            carousel,
+            capper,
     };    //Array for all the subsystems
 
 

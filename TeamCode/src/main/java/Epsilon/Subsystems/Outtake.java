@@ -23,10 +23,10 @@ public class Outtake implements Subsystem {
     public final double TICKS_PER_INCH = TICKS_PER_ROTATION/circumference;      //temporary numbers lmao please fix later
     public final double ARM_EXTEND = 0.6;
     public final double ARM_RETRACT = 0.0;
-    public final int ASH_BOTTOM = 300;
-    public final int ASH_MID = 600;
-    public final int ASH_TOP = 893;
-    public final int FLOOR = 150;
+    public final int ASH_BOTTOM = 400;
+    public final int ASH_MID = 740;
+    public final int ASH_TOP = 1100;
+    public final int FLOOR = 240;
 
     public DcMotor upMotor;
     public Servo arm;
@@ -40,7 +40,7 @@ public class Outtake implements Subsystem {
         upMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public double PID(double targetPos) {
-        double kP = 0.04;
+        double kP = 0.01;
         double power;
         double error = targetPos - upMotor.getCurrentPosition();
         power = error * kP;
@@ -149,13 +149,13 @@ public class Outtake implements Subsystem {
                     break;
                 case VERTICAL_RETRACT:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
-                    if(time.milliseconds() > outtakeInitTime + 5000) {
+                    if(time.milliseconds() > outtakeInitTime + 6000) {
                         outtakeState = OuttakeState.OUTTAKE_END;
                     }
                     break;
                 case OUTTAKE_END:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(FLOOR));
-                    if(time.milliseconds() > outtakeInitTime + 6000) {
+                    if(time.milliseconds() > outtakeInitTime + 7000) {
                         complete = true;
                     }
                     break;

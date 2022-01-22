@@ -1,11 +1,14 @@
 package Epsilon.Subsystems;
 
+import android.sax.StartElementListener;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -13,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import Epsilon.OurRobot;
 import Epsilon.Superclasses.Subsystem;
 
 public class IMU implements Subsystem {
@@ -23,8 +27,8 @@ public class IMU implements Subsystem {
     private double angle;
     private double lastIMUReading;
     private static double zero = 0;
-    static final double P_TURN_COEFF = 0.025;
-    static final double HEADING_THRESHOLD = 0.5;
+    static final double P_TURN_COEFF = 0.5;
+    static final double HEADING_THRESHOLD = 0.01;
 
     public void initialize(LinearOpMode opMode) {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
@@ -64,26 +68,35 @@ public class IMU implements Subsystem {
         return angle;
     }
 
-    public void gyroTurn(double speed, double angle){
+
+    public void gyroTurn(double speed, double angle, LinearOpMode opMode){
         double error, steer;
         double leftSpeed, rightSpeed;
-        error = getError (angle);
-        while (Math.abs(error) > HEADING_THRESHOLD) {
-            steer = Range.clip(P_TURN_COEFF * error,-speed,speed);
+        error = getError (angle, opMode);
+        ElapsedTime time = new ElapsedTime();
+        while (time.milliseconds() < 2000) {
+            steer = Range.clip(P_TURN_COEFF * error, -speed, speed);
             rightSpeed = steer;
             leftSpeed = -rightSpeed;
 
-            drivetrain.frontLeft.setPower(leftSpeed);
-            drivetrain.backLeft.setPower(leftSpeed);
-            drivetrain.frontRight.setPower(rightSpeed);
-            drivetrain.backRight.setPower(rightSpeed);
+            OurRobot.drivetrain.frontLeft.setPower(leftSpeed);
+            OurRobot.drivetrain.frontRight.setPower(rightSpeed);
+            OurRobot.drivetrain.backRight.setPower(rightSpeed);
+            OurRobot.drivetrain.backLeft.setPower(leftSpeed);
+
+            error = getError(angle, opMode);
         }
     }
-    public double getError (double targetAngle){
+    public double getError (double targetAngle, LinearOpMode opMode){
         double angleError;
         Orientation orientation = imu.getAngularOrientation(
                 AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        angleError = targetAngle - orientation.firstAngle;         //changed from third angle to second angle
+        angleError = targetAngle - orientation.thirdAngle; //changed from third angle to second angle
+        opMode.telemetry.addData("firstangle", orientation.firstAngle);
+        opMode.telemetry.addData("secondangle", orientation.secondAngle);
+        opMode.telemetry.addData("thirdangle", orientation.thirdAngle);
+        opMode.telemetry.update();
+
         normalize(angleError);
         return angleError;
     }
@@ -101,9 +114,8 @@ public class IMU implements Subsystem {
     }
 
     public void update() {
-        double newAngle = imu.getAngularOrientation().firstAngle;      //changed from first angle to second angle
+        double newAngle = imu.getAngularOrientation().thirdAngle;      //changed from first angle to second angle
         angle += normalize(newAngle - lastIMUReading);
         lastIMUReading = newAngle;
     }
-
 }

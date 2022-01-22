@@ -55,9 +55,9 @@ public class OpenCV implements Subsystem {
         final Scalar BLUE = new Scalar(0, 0, 255);
         final Scalar GREEN = new Scalar(0, 255, 0);
 
-        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,100);
-        final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(150,100);
-        final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(290,100);
+        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,120);
+        final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(150,120);
+        final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(290,120);
         final int REGION_WIDTH = 30;
         final int REGION_HEIGHT = 30;
         Point region1_pointA = new Point(
