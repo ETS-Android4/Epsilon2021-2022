@@ -149,13 +149,13 @@ public class Outtake implements Subsystem {
                     break;
                 case VERTICAL_RETRACT:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(ashLevel));
-                    if(time.milliseconds() > outtakeInitTime + 6000) {
+                    if(time.milliseconds() > outtakeInitTime + 5500) {
                         outtakeState = OuttakeState.OUTTAKE_END;
                     }
                     break;
                 case OUTTAKE_END:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(FLOOR));
-                    if(time.milliseconds() > outtakeInitTime + 7000) {
+                    if(time.milliseconds() > outtakeInitTime + 6500) {
                         complete = true;
                     }
                     break;

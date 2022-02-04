@@ -20,6 +20,30 @@ public class BlueWarehouse extends LinearOpMode {
 
         waitForStart();
 
+        noCycle();
+
+    }
+
+    public void noCycle(){
+        //drive to ASH
+        OurRobot.drivetrain.Move(0.5, 25, Drivetrain.MoveType.STRAFE, this);
+        OurRobot.drivetrain.Move(0.5, -16, Drivetrain.MoveType.DRIVE, this);
+
+        //score
+        OurRobot.outtake.scoreASH(Outtake.PosASH.TOP);
+
+        //drive back and turn
+        OurRobot.drivetrain.Move(0.5, 14, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.5, 18, Drivetrain.MoveType.TURN, this);
+        OurRobot.drivetrain.Move(0.5, 5, Drivetrain.MoveType.STRAFE, this);
+
+        OurRobot.CycleFreight(this);
+        OurRobot.CycleFreight(this);
+
+        OurRobot.drivetrain.Move(0.75, 20, Drivetrain.MoveType.DRIVE, this);
+    }
+
+    public void noCycle(Outtake.PosASH scorePos){
         //drive to ASH
         OurRobot.drivetrain.Move(0.5, -29, Drivetrain.MoveType.STRAFE, this);
         OurRobot.drivetrain.Move(0.5, -18, Drivetrain.MoveType.DRIVE, this);
@@ -33,20 +57,5 @@ public class BlueWarehouse extends LinearOpMode {
 
         //Drive into warehouse
         OurRobot.drivetrain.Move(0.5,-55, Drivetrain.MoveType.DRIVE, this);
-
-        /*
-        Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
-
-        //Strafes right to shipping hub, turns 180, and pre loads
-        OurRobot.drivetrain.Move(1, 10, Drivetrain.MoveType.STRAFE);
-        OurRobot.imu.gyroTurn(0.5, 180);
-        OurRobot.outtake.scoreASH(scorePos);
-
-        //Drives back, turns 90, drives to warehouse
-        OurRobot.drivetrain.Move(1, 8, Drivetrain.MoveType.DRIVE);
-        OurRobot.imu.gyroTurn(0.5, 90);
-        OurRobot.drivetrain.Move(1, 10, Drivetrain.MoveType.DRIVE);
-
-         */
     }
 }

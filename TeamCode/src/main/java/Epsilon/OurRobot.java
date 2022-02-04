@@ -61,6 +61,27 @@ public class OurRobot {
         }
     }
     public static void CycleFreight(LinearOpMode opMode) {
+        //drive into warehouse
+        drivetrain.Move(0.5, 35, Drivetrain.MoveType.DRIVE, opMode);
+
+        //suck balls and cubes
+        intake.wheel.setPower(1);
+        wait(2500, opMode);
+
+        //drive out and turn towards ASH
+        drivetrain.Move(0.5, -50, Drivetrain.MoveType.DRIVE, opMode);
+        drivetrain.Move(0.5, -18, Drivetrain.MoveType.TURN, opMode);
+
+        //drive to ASH and score
+        drivetrain.Move(0.5, -16, Drivetrain.MoveType.DRIVE, opMode);
+        outtake.scoreASH(Outtake.PosASH.TOP);
+
+        //drive back to starting position
+        OurRobot.drivetrain.Move(0.5, 14, Drivetrain.MoveType.DRIVE, opMode);
+        OurRobot.drivetrain.Move(0.5, 18, Drivetrain.MoveType.TURN, opMode);
+        OurRobot.drivetrain.Move(0.5, 5, Drivetrain.MoveType.STRAFE, opMode);
+
+        /*
         drivetrain.Move(0.5, 7, Drivetrain.MoveType.DRIVE, opMode);
         drivetrain.Move(0.5, -18, Drivetrain.MoveType.TURN, opMode);
         drivetrain.Move(0.5,18, Drivetrain.MoveType.STRAFE,opMode);
@@ -72,5 +93,6 @@ public class OurRobot {
         drivetrain.Move(0.5, 18, Drivetrain.MoveType.TURN, opMode);
         drivetrain.Move(0.5,-7, Drivetrain.MoveType.DRIVE,opMode);
         outtake.scoreASH(Outtake.PosASH.TOP);
+        */
     }
 }
