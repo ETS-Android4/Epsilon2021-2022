@@ -110,11 +110,13 @@ public class TestFinalTeleOp extends LinearOpMode {
                     }
 
                     //automation
+                    /*
                     if (gamepad2.x) {
                         level = OurRobot.outtake.ASH_TOP;
                         outtakeInitTime = time.milliseconds();
                         outtakeState = OuttakeState.VERTICAL_EXTEND;
-                    } else if (gamepad2.a) {
+                    }
+                    else if (gamepad2.a) {
                         level = OurRobot.outtake.ASH_MID;
                         outtakeInitTime = time.milliseconds();
                         outtakeState = OuttakeState.VERTICAL_EXTEND;
@@ -123,21 +125,11 @@ public class TestFinalTeleOp extends LinearOpMode {
                         outtakeInitTime = time.milliseconds();
                         outtakeState = OuttakeState.VERTICAL_EXTEND;
                     }
+                    */
                     break;
                 case VERTICAL_EXTEND:
-                    /*
-                        if(OurRobot.outtake.upMotor.getCurrentPosition() > level)
-                            outtakeFSMSpeed = -0.6;
-                        else
-                            outtakeFSMSpeed = 0.6;
-
-                     */
-                        //OurRobot.outtake.setVertical(0.6,level);
-                        //OurRobot.outtake.upMotor.setPower(outtakeFSMSpeed);
                         OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
-
                         outtakeState = OuttakeState.HORIZONTAL_EXTEND;
-
                     break;
                 case HORIZONTAL_EXTEND:
                     OurRobot.outtake.upMotor.setPower(OurRobot.outtake.PID(level));
@@ -226,8 +218,21 @@ public class TestFinalTeleOp extends LinearOpMode {
              * Capper *
              **********/
 
-            OurRobot.capper.tapeExtender.setPower(gamepad2.right_stick_y);
-            //OurRobot.capper.pivot.setPower(gamepad2.right_trigger);
+            OurRobot.capper.tapeExtender.setPower(gamepad2.left_trigger);
+            OurRobot.capper.tapeExtender.setPower(-gamepad2.right_trigger);
+
+            OurRobot.capper.pivot.setPower(-gamepad2.right_stick_y);
+
+            /*
+            if (gamepad2.a)
+                OurRobot.capper.pivot.setPower(0.7);
+            else if (gamepad2.y)
+                OurRobot.capper.pivot.setPower(-0.7);
+            else
+                OurRobot.capper.pivot.setPower(0.0);
+               */
+
+            OurRobot.capper.tapeRotator.setPower(0.1*gamepad2.right_stick_x);
 
             telemetry.addData("Door Toggle", doorToggle);
             telemetry.addData("Horizontal",OurRobot.outtake.arm.getPosition());

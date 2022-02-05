@@ -27,8 +27,9 @@ public class IMU implements Subsystem {
     private double angle;
     private double lastIMUReading;
     private static double zero = 0;
-    static final double P_TURN_COEFF = 0.5;
-    static final double HEADING_THRESHOLD = 0.01;
+    static final double P_TURN_COEFF = 0.05;
+    static final double HEADING_THRESHOLD = 0.5;
+    static final double powerCap = 0.04;
 
     public void initialize(LinearOpMode opMode) {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
@@ -68,7 +69,6 @@ public class IMU implements Subsystem {
         return angle;
     }
 
-
     public void gyroTurn(double speed, double angle, LinearOpMode opMode){
         double error, steer;
         double leftSpeed, rightSpeed;
@@ -76,6 +76,11 @@ public class IMU implements Subsystem {
         ElapsedTime time = new ElapsedTime();
         while (time.milliseconds() < 2000) {
             steer = Range.clip(P_TURN_COEFF * error, -speed, speed);
+            if (steer > -powerCap && steer < 0) {
+                steer = -powerCap;
+            } else if (steer < powerCap) {
+                steer = powerCap;
+            }
             rightSpeed = steer;
             leftSpeed = -rightSpeed;
 
