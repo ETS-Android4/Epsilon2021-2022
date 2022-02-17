@@ -21,6 +21,7 @@ public class BlueWarehouse extends LinearOpMode {
         waitForStart();
 
         noCycle();
+        //cycle();
 
     }
 
@@ -57,5 +58,45 @@ public class BlueWarehouse extends LinearOpMode {
 
         //Drive into warehouse
         OurRobot.drivetrain.Move(0.5,-55, Drivetrain.MoveType.DRIVE, this);
+    }
+
+    public void cycle(){
+        driveToWarehouse();
+        intakeElement();
+        clearIntake();
+        returnToASH();
+        score(Outtake.PosASH.TOP);
+    }
+
+    public void driveToWarehouse() {
+        followPath(false);
+    }
+
+    public void returnToASH(){
+        followPath(true);
+    }
+
+    public void followPath(boolean reverse){
+
+    }
+
+    public void intakeElement(){
+        OurRobot.intake.wheel.setPower(1.0);
+    }
+
+    public void clearIntake(){
+        OurRobot.intake.wheel.setPower(-1.0);
+    }
+
+    public void score(Outtake.PosASH scorePos){
+        OurRobot.outtake.extend(OurRobot.outtake.ASH_TOP);
+    }
+
+    public void drive(int inches, double power){
+        OurRobot.drivetrain.Move(0.5,-55, Drivetrain.MoveType.DRIVE, this);
+    }
+
+    public void turn90(){
+        OurRobot.drivetrain.Move(0.3, 18, Drivetrain.MoveType.TURN, this);
     }
 }
