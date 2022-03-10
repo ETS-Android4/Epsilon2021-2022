@@ -29,7 +29,7 @@ public class IMU implements Subsystem {
     private static double zero = 0;
     static final double P_TURN_COEFF = 0.05;
     static final double HEADING_THRESHOLD = 0.5;
-    static final double powerCap = 0.04;
+    static final double powerCap = 0.07;
 
     public void initialize(LinearOpMode opMode) {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");

@@ -14,7 +14,8 @@ import Epsilon.Superclasses.Subsystem;
 //Initializes all the motors/hardware for the drivetrain
 public class Drivetrain implements Subsystem {
 
-//    Odometry odo = OurRobot.Odometry;
+    Odometry odo;
+
 
     public DcMotor frontLeft;
     public DcMotor frontRight;
@@ -22,11 +23,12 @@ public class Drivetrain implements Subsystem {
     public DcMotor backRight;
 
     //PID constants - will be tuned to different values
-    private double kP = 0;
-    private double kI = 0;
-    private double kD = 0;
+    private double kP = 0.1;
+    private double kI = 0.1;
+    private double kD = 0.1;
 
     public void initialize(LinearOpMode opMode) {
+        odo = OurRobot.Odometry;
 
         frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
         frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
@@ -47,11 +49,13 @@ public class Drivetrain implements Subsystem {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+
     public enum MoveType {
         DRIVE,
         STRAFE,
         TURN
     }
+
     public void TargetPos(double EncoderCounts, MoveType Type) {
         switch (Type) {
             case DRIVE:
@@ -99,15 +103,16 @@ public class Drivetrain implements Subsystem {
         frontRight.setPower(power);
         backLeft.setPower(power);
         backRight.setPower(power);
-        while(frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy() && opMode.opModeIsActive()) {
+        while (frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy() && opMode.opModeIsActive()) {
 
         }
     }
+
     /*******************
      * PID Stuff Woohoo
      ******************/
 
-    public void resetEncoderPos(){
+    public void resetEncoderPos() {
         //odo.encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //odo.encoderX.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //odo.encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -119,9 +124,9 @@ public class Drivetrain implements Subsystem {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-/*
+
     //Basic PID method for linear/lateral movement
-    public void Move(double inchesX, double inchesY){
+    public void Move(double inchesX, double inchesY) {
 
         double targetX = INtoEC(inchesX);
         double targetY = INtoEC(inchesY);
@@ -133,7 +138,7 @@ public class Drivetrain implements Subsystem {
         double integralSumY = 0;
 
         ElapsedTime timer = new ElapsedTime();
-        while (targetX - currentPosX > 0 || targetY - currentPosY > 0){
+        while (targetX - currentPosX > 0 || targetY - currentPosY > 0) {
 
             odo.update();
 
@@ -149,21 +154,22 @@ public class Drivetrain implements Subsystem {
             double derivativeY = (errorY - lastErrorY) / timer.seconds();
 
             //sum of all error over time
-            integralSumX = integralSumX + (errorX*timer.seconds());
-            integralSumY = integralSumY + (errorY*timer.seconds());
+            integralSumX = integralSumX + (errorX * timer.seconds());
+            integralSumY = integralSumY + (errorY * timer.seconds());
 
-            double powerX = (kP*errorX) + (kI*integralSumX) + (kD*derivativeX);
-            double powerY = (kP*errorY) + (kI*integralSumY) + (kD*derivativeY);
+            double powerX = (kP * errorX) + (kI * integralSumX) + (kD * derivativeX);
+            double powerY = (kP * errorY) + (kI * integralSumY) + (kD * derivativeY);
 
             //Power(power, Type);
 
-            frontLeft.setPower(powerY+powerX);
-            backLeft.setPower(powerY-powerX);
-            frontRight.setPower(powerY-powerX);
-            backRight.setPower(powerY+powerX);
+            frontLeft.setPower(powerY + powerX);
+            backLeft.setPower(powerY - powerX);
+            frontRight.setPower(powerY - powerX);
+            backRight.setPower(powerY + powerX);
 
             lastErrorX = errorX;
             lastErrorY = errorY;
             timer.reset();
-        }*/
+        }
     }
+}

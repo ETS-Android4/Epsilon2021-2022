@@ -221,8 +221,9 @@ public class TestFinalTeleOp extends LinearOpMode {
             OurRobot.capper.tapeExtender.setPower(gamepad2.left_trigger);
             OurRobot.capper.tapeExtender.setPower(-gamepad2.right_trigger);
 
-            OurRobot.capper.pivot.setPower(-gamepad2.right_stick_y);
-
+            OurRobot.capper.pivot.setPower(-0.75 * gamepad2.right_stick_y);
+            
+            OurRobot.capper.tapeRotator.setPower(0.4*gamepad2.right_stick_x);
             /*
             if (gamepad2.a)
                 OurRobot.capper.pivot.setPower(0.7);
@@ -232,7 +233,7 @@ public class TestFinalTeleOp extends LinearOpMode {
                 OurRobot.capper.pivot.setPower(0.0);
                */
 
-            OurRobot.capper.tapeRotator.setPower(0.1*gamepad2.right_stick_x);
+
 
             telemetry.addData("Door Toggle", doorToggle);
             telemetry.addData("Horizontal",OurRobot.outtake.arm.getPosition());

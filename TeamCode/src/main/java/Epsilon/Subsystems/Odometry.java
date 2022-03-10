@@ -2,9 +2,11 @@ package Epsilon.Subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import java.time.Year;
 
+import Epsilon.OurRobot;
 import Epsilon.Superclasses.Subsystem;
 
 public class Odometry implements Subsystem {
@@ -16,6 +18,8 @@ public class Odometry implements Subsystem {
     //public double lastEncoderXPos;
     public double lastEncoderYPos;
     public double lastEncoderXPos;
+    public double XChange;
+    public double YChange;
     public double lastAngle = 0;
     public double xPos;
     public double yPos;
@@ -28,8 +32,8 @@ public class Odometry implements Subsystem {
     LinearOpMode opMode;
 
     public void initialize(LinearOpMode opMode) {
-        encoderX = opMode.hardwareMap.dcMotor.get("encoderX");
-        encoderY = opMode.hardwareMap.dcMotor.get("encoderY");
+        encoderX = OurRobot.drivetrain.frontLeft; //opMode.hardwareMap.get(DcMotor.class, "frontLeft");
+        encoderY = OurRobot.drivetrain.backLeft; //.hardwareMap.get(DcMotor.class, "backLeft");
 
         encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -60,8 +64,8 @@ public class Odometry implements Subsystem {
 
         //Find change in x and y position - ?
         //swapped XChange and YChange
-        double YChange = YEncoderChange * Math.cos(heading) + XEncoderChange * Math.sin(heading);
-        double XChange = YEncoderChange * Math.sin(heading) + XEncoderChange * Math.cos(heading);
+        YChange = YEncoderChange * Math.cos(heading) + XEncoderChange * Math.sin(heading);
+        XChange = YEncoderChange * Math.sin(heading) + XEncoderChange * Math.cos(heading);
 
         xPos += encoderToInch(XChange);
         yPos += encoderToInch(YChange);

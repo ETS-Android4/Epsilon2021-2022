@@ -26,7 +26,7 @@ public class Outtake implements Subsystem {
     public final int ASH_BOTTOM = 400;
     public final int ASH_MID = 740;
     public final int ASH_TOP = 1100;
-    public final int FLOOR = 240;
+    public final int FLOOR = 75;
 
     public DcMotor upMotor;
     public Servo arm;

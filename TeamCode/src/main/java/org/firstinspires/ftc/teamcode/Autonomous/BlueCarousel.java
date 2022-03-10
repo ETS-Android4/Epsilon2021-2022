@@ -42,16 +42,16 @@ public class BlueCarousel extends LinearOpMode {
         OurRobot.drivetrain.Move(0.5, 7, Drivetrain.MoveType.DRIVE, this);
 
         //Strafe stuff down below
-        OurRobot.drivetrain.Move(0.5, 30, Drivetrain.MoveType.STRAFE, this);
         OurRobot.imu.gyroTurn(0.7,0,this);
-        OurRobot.drivetrain.Move(0.5, 30, Drivetrain.MoveType.STRAFE, this);
-        OurRobot.drivetrain.Move(0.5,4, Drivetrain.MoveType.DRIVE,this);
+        OurRobot.drivetrain.Move(0.5, 60, Drivetrain.MoveType.STRAFE, this);
+        //OurRobot.drivetrain.Move(0.5, 30, Drivetrain.MoveType.STRAFE, this);
+        OurRobot.drivetrain.Move(0.3,2, Drivetrain.MoveType.DRIVE,this);
 
-        OurRobot.carousel.duckMotor.setPower(-0.5);
-        OurRobot.wait(5000, this);
+        OurRobot.carousel.duckMotor.setPower(0.6);
+        OurRobot.wait(3000, this);
         OurRobot.carousel.duckMotor.setPower(0.0);
 
-        OurRobot.drivetrain.Move(0.5, -20, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(1, -20, Drivetrain.MoveType.DRIVE, this);
 
     }
 }

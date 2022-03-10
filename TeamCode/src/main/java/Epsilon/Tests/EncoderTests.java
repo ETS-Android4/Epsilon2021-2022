@@ -1,12 +1,13 @@
 package Epsilon.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import Epsilon.OurRobot;
 //import Epsilon.Subsystems.Odometry;
 
-@TeleOp
+@Autonomous
 public class EncoderTests extends LinearOpMode{
 
     @Override
@@ -17,7 +18,10 @@ public class EncoderTests extends LinearOpMode{
 
         waitForStart();
         while (opModeIsActive()){
-            telemetry.addData("Encoder Position", OurRobot.Odometry.encoderX.getCurrentPosition());
+            //robot.drivetrain.Move(5,0);
+            telemetry.addData("Encoder Position", OurRobot.drivetrain.frontLeft.getCurrentPosition());
+            telemetry.addData("EncoderX", OurRobot.Odometry.XChange);
+            telemetry.addData("EncoderY", OurRobot.Odometry.YChange);
             telemetry.update();
         }
     }

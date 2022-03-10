@@ -23,7 +23,7 @@ import Epsilon.Superclasses.Subsystem;
 public class OurRobot {
 
     //Creates instances of all the subsystem
-    public static Drivetrain drivetrain = new Drivetrain();
+
     public static CarouselJank carousel = new CarouselJank();
     public static Intake intake = new Intake();
     public static IMU imu = new IMU();
@@ -31,27 +31,29 @@ public class OurRobot {
     public static Odometry Odometry = new Odometry();
     public static OpenCV OpenCV = new OpenCV();
     public static NoCap capper = new NoCap();
+    public static Drivetrain drivetrain = new Drivetrain();
 
     private static final Subsystem[] Subsystems = {
             outtake,
             drivetrain,
             intake,
             imu,
-            //Odometry,
+            Odometry,
             OpenCV,
             carousel,
-            capper,
+            capper
     };    //Array for all the subsystems
 
 
     // "initialize" method runs the "initialize" method in all the subsystems
     // Essentially declares/initializes all the motors and stuff
     public static void initialize(LinearOpMode opMode) {
-        opMode.telemetry.addLine("Hi");
-        opMode.telemetry.update();
+
         for (int i = 0; i<Subsystems.length; i++){
             Subsystems[i].initialize(opMode);
         }
+        opMode.telemetry.addLine("Hi");
+        opMode.telemetry.update();
     }
 
     public static void wait(int milliseconds, LinearOpMode opMode){
@@ -62,15 +64,17 @@ public class OurRobot {
     }
     public static void CycleFreight(LinearOpMode opMode) {
         //drive into warehouse
-        drivetrain.Move(0.5, 35, Drivetrain.MoveType.DRIVE, opMode);
+        drivetrain.Move(0.75, 58, Drivetrain.MoveType.DRIVE, opMode);
 
         //suck balls and cubes
-        intake.wheel.setPower(1);
-        wait(2500, opMode);
+        intake.wheel.setPower(-1);
+        wait(2000, opMode);
+        intake.wheel.setPower(0.5);
 
         //drive out and turn towards ASH
-        drivetrain.Move(0.5, -50, Drivetrain.MoveType.DRIVE, opMode);
-        drivetrain.Move(0.5, -18, Drivetrain.MoveType.TURN, opMode);
+        drivetrain.Move(0.5, 7, Drivetrain.MoveType.STRAFE, opMode);
+        drivetrain.Move(0.5, -65, Drivetrain.MoveType.DRIVE, opMode);
+        drivetrain.Move(0.5, 18, Drivetrain.MoveType.TURN, opMode);
 
         //drive to ASH and score
         drivetrain.Move(0.5, -16, Drivetrain.MoveType.DRIVE, opMode);
