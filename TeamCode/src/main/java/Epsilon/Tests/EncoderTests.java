@@ -17,12 +17,15 @@ public class EncoderTests extends LinearOpMode{
         robot.initialize(this);
 
         waitForStart();
-        while (opModeIsActive()){
-            //robot.drivetrain.Move(5,0);
-            telemetry.addData("Encoder Position", OurRobot.drivetrain.frontLeft.getCurrentPosition());
+        //while (opModeIsActive()){
+            robot.drivetrain.Move(10,0);
+            telemetry.addData("Encoder Position", robot.Odometry.encoderToInch(OurRobot.drivetrain.backLeft.getCurrentPosition()));
             telemetry.addData("EncoderX", OurRobot.Odometry.XChange);
             telemetry.addData("EncoderY", OurRobot.Odometry.YChange);
+            robot.Odometry.update();
             telemetry.update();
-        }
+
+
+        //}
     }
 }

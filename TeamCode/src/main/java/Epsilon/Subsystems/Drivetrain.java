@@ -85,8 +85,8 @@ public class Drivetrain implements Subsystem {
 
     public double INtoEC(double inches) {
         //Inches to Encoder Counts Stuff
-        //(537 ticks / 1 rev) * (1 rev / 96pi mm) * (1 mm / x in)
-        double COUNTS_PER_INCH = 45.2;
+        //(8192 ticks / 1 rev) * (1 rev / 1.96pi )
+        double COUNTS_PER_INCH = 8192/(Math.PI*1.96);
         double EncoderCounts = inches * COUNTS_PER_INCH;
         return EncoderCounts;
     }
@@ -128,10 +128,10 @@ public class Drivetrain implements Subsystem {
     //Basic PID method for linear/lateral movement
     public void Move(double inchesX, double inchesY) {
 
-        double targetX = INtoEC(inchesX);
-        double targetY = INtoEC(inchesY);
-        double currentPosX = odo.encoderX.getCurrentPosition();
-        double currentPosY = odo.encoderY.getCurrentPosition();
+        double currentPosX = INtoEC(odo.xPos);
+        double currentPosY = INtoEC(odo.yPos);
+        double targetX = INtoEC(inchesX) + currentPosX;
+        double targetY = INtoEC(inchesY) + currentPosY;
         double lastErrorX = 0;
         double lastErrorY = 0;
         double integralSumX = 0;
@@ -142,8 +142,8 @@ public class Drivetrain implements Subsystem {
 
             odo.update();
 
-            currentPosX = odo.xPos;
-            currentPosY = odo.yPos;
+            currentPosX = INtoEC(odo.xPos);
+            currentPosY = INtoEC(odo.yPos);
 
             //calculate the error
             double errorX = targetX - currentPosX;
@@ -157,8 +157,8 @@ public class Drivetrain implements Subsystem {
             integralSumX = integralSumX + (errorX * timer.seconds());
             integralSumY = integralSumY + (errorY * timer.seconds());
 
-            double powerX = (kP * errorX) + (kI * integralSumX) + (kD * derivativeX);
-            double powerY = (kP * errorY) + (kI * integralSumY) + (kD * derivativeY);
+            double powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
+            double powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
 
             //Power(power, Type);
 

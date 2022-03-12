@@ -32,8 +32,8 @@ public class Odometry implements Subsystem {
     LinearOpMode opMode;
 
     public void initialize(LinearOpMode opMode) {
-        encoderX = OurRobot.drivetrain.frontLeft; //opMode.hardwareMap.get(DcMotor.class, "frontLeft");
-        encoderY = OurRobot.drivetrain.backLeft; //.hardwareMap.get(DcMotor.class, "backLeft");
+        encoderX = OurRobot.drivetrain.backLeft; //opMode.hardwareMap.get(DcMotor.class, "frontLeft");
+        encoderY = OurRobot.drivetrain.frontLeft; //.hardwareMap.get(DcMotor.class, "backLeft");
 
         encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -46,7 +46,11 @@ public class Odometry implements Subsystem {
     }
 
     public double encoderToInch(double ticks){
-        double inches = ticks*(Math.PI/4096);
+        //Inches to Encoder Counts Stuff
+        //Diameter: 1.96 in
+        //8192 ticks per rev
+        //(8192 ticks / 1 rev) * (1 rev / 1.96pi in)
+        double inches = ticks/1330.40540185;
         return inches;
     }
 
