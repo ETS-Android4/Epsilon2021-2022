@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import Epsilon.OurRobot;
 //import Epsilon.Subsystems.Odometry;
 
-@Autonomous
+@TeleOp
 public class EncoderTests extends LinearOpMode{
 
     @Override
@@ -17,15 +17,26 @@ public class EncoderTests extends LinearOpMode{
         robot.initialize(this);
 
         waitForStart();
-        //while (opModeIsActive()){
-            robot.drivetrain.Move(10,0);
-            telemetry.addData("Encoder Position", robot.Odometry.encoderToInch(OurRobot.drivetrain.backLeft.getCurrentPosition()));
-            telemetry.addData("EncoderX", OurRobot.Odometry.XChange);
-            telemetry.addData("EncoderY", OurRobot.Odometry.YChange);
+        while (opModeIsActive()){
+            //robot.drivetrain.Move(0,10);
+            //telemetry.addData("EncoderX Position", robot.Odometry.xPos);
+
+            telemetry.addData("frontLeft Position (TICKS)", robot.drivetrain.frontLeft.getCurrentPosition());
+            telemetry.addData("frontLeft Position (INCH)", robot.Odometry.encoderToInch(robot.drivetrain.frontLeft.getCurrentPosition()));
+            telemetry.addData("yPos", robot.Odometry.yPos);
+            telemetry.addData("Y change", OurRobot.Odometry.YChange);
+
+            telemetry.addData("backLeft Position (TICKS)", robot.drivetrain.backLeft.getCurrentPosition());
+            telemetry.addData("backLeft Position (INCH)", robot.Odometry.encoderToInch(robot.drivetrain.backLeft.getCurrentPosition()));
+            telemetry.addData("xPos", robot.Odometry.xPos);
+            telemetry.addData("X change", OurRobot.Odometry.XChange);
+
+
+            //telemetry.addData("EncoderX change", OurRobot.Odometry.XChange);
             robot.Odometry.update();
             telemetry.update();
 
 
-        //}
+        }
     }
 }

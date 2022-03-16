@@ -16,14 +16,13 @@ public class Drivetrain implements Subsystem {
 
     Odometry odo;
 
-
     public DcMotor frontLeft;
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor backRight;
 
     //PID constants - will be tuned to different values
-    private double kP = 0.1;
+    private double kP = 0.055;
     private double kI = 0.1;
     private double kD = 0.1;
 

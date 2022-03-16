@@ -43,6 +43,8 @@ public class Odometry implements Subsystem {
 
         lastEncoderYPos = encoderY.getCurrentPosition();
         lastEncoderXPos = encoderX.getCurrentPosition();
+        //xPos = 0;
+        //yPos = 0;
     }
 
     public double encoderToInch(double ticks){
