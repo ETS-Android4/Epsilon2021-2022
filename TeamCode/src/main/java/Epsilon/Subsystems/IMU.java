@@ -119,7 +119,9 @@ public class IMU implements Subsystem {
     }
 
     public void update() {
-        double newAngle = imu.getAngularOrientation().thirdAngle;      //changed from first angle to second angle
+        Orientation orientation = imu.getAngularOrientation(
+                AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        double newAngle = orientation.thirdAngle;      //changed from first angle to second angle
         angle += normalize(newAngle - lastIMUReading);
         lastIMUReading = newAngle;
     }

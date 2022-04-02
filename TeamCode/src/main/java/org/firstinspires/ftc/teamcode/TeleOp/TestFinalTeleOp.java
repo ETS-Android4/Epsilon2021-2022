@@ -26,7 +26,10 @@ public class TestFinalTeleOp extends LinearOpMode {
 
         //OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
         OurRobot.initialize(this);
-
+        OurRobot.drivetrain.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        OurRobot.drivetrain.backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        OurRobot.drivetrain.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        OurRobot.drivetrain.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         double verticalPosition = OurRobot.outtake.upMotor.getCurrentPosition();
 

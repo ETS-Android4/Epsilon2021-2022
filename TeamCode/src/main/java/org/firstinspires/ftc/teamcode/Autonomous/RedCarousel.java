@@ -39,9 +39,9 @@ public class RedCarousel extends LinearOpMode {
         //OurRobot.imu.gyroTurn(0.8, 90, this);
         OurRobot.drivetrain.Move(0.5, -18, Drivetrain.MoveType.TURN, this);
         OurRobot.drivetrain.Move(0.5, 46, Drivetrain.MoveType.DRIVE, this);
-        //OurRobot.carousel.duckMotor.setPower(0.5);
-        //OurRobot.wait(5000, this);
-        //OurRobot.carousel.duckMotor.setPower(0.0);
+        OurRobot.carousel.duckMotor.setPower(0.5);
+        OurRobot.wait(5000, this);
+        OurRobot.carousel.duckMotor.setPower(0.0);
         OurRobot.drivetrain.Move(0.5, -20, Drivetrain.MoveType.STRAFE, this);
     }
 }

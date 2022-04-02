@@ -22,12 +22,12 @@ public class Drivetrain implements Subsystem {
     public DcMotor backRight;
 
     //PID constants - will be tuned to different values
-    private double kP = 0.055;
+    private double kP = 0.00005;
     private double kI = 0.1;
     private double kD = 0.1;
 
     public void initialize(LinearOpMode opMode) {
-        odo = OurRobot.Odometry;
+        //odo = OurRobot.Odometry;
 
         frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
         frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
@@ -127,8 +127,9 @@ public class Drivetrain implements Subsystem {
     //Basic PID method for linear/lateral movement
     public void Move(double inchesX, double inchesY) {
 
-        double currentPosX = INtoEC(odo.xPos);
-        double currentPosY = INtoEC(odo.yPos);
+        OurRobot.Odometry.update();
+        double currentPosX = INtoEC(OurRobot.Odometry.xPos);
+        double currentPosY = INtoEC(OurRobot.Odometry.yPos);
         double targetX = INtoEC(inchesX) + currentPosX;
         double targetY = INtoEC(inchesY) + currentPosY;
         double lastErrorX = 0;
@@ -139,10 +140,10 @@ public class Drivetrain implements Subsystem {
         ElapsedTime timer = new ElapsedTime();
         while (targetX - currentPosX > 0 || targetY - currentPosY > 0) {
 
-            odo.update();
+            OurRobot.Odometry.update();
 
-            currentPosX = INtoEC(odo.xPos);
-            currentPosY = INtoEC(odo.yPos);
+            currentPosX = INtoEC(OurRobot.Odometry.xPos);
+            currentPosY = INtoEC(OurRobot.Odometry.yPos);
 
             //calculate the error
             double errorX = targetX - currentPosX;
