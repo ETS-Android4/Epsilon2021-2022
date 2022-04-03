@@ -22,7 +22,7 @@ public class Drivetrain implements Subsystem {
     public DcMotor backRight;
 
     //PID constants - will be tuned to different values
-    private double kP = 0.00009;
+    private double kP = 0.00007;
     private double minorkP = 0.00025;
     private double kI = 0.1;
     private double kD = 0.1;
@@ -158,6 +158,7 @@ public class Drivetrain implements Subsystem {
             //sum of all error over time
             integralSumX = integralSumX + (errorX * timer.seconds());
             integralSumY = integralSumY + (errorY * timer.seconds());
+
             if (inchesX > inchesY) {
                 powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
                 powerY = (minorkP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
@@ -166,6 +167,12 @@ public class Drivetrain implements Subsystem {
                 powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
             }
 
+            if (powerX < 0.1) {
+                powerX = 0.1 * (errorX / Math.abs(errorX)); // determine pos or neg
+            }
+            if (powerY < 0.1) {
+                powerY = 0.1 * (errorY / Math.abs(errorY));
+            }
             //Power(power, Type);
 
             frontLeft.setPower(powerY - powerX);
