@@ -22,9 +22,11 @@ public class Drivetrain implements Subsystem {
     public DcMotor backRight;
 
     //PID constants - will be tuned to different values
-    private double kP = 0.00005;
+    private double kP = 0.00009;
+    private double minorkP = 0.00025;
     private double kI = 0.1;
     private double kD = 0.1;
+    private double thres = 300;
 
     public void initialize(LinearOpMode opMode) {
         //odo = OurRobot.Odometry;
@@ -125,7 +127,7 @@ public class Drivetrain implements Subsystem {
     }
 
     //Basic PID method for linear/lateral movement
-    public void Move(double inchesX, double inchesY) {
+    public void Move(double inchesX, double inchesY, LinearOpMode opMode) {
 
         OurRobot.Odometry.update();
         double currentPosX = INtoEC(OurRobot.Odometry.xPos);
@@ -136,9 +138,9 @@ public class Drivetrain implements Subsystem {
         double lastErrorY = 0;
         double integralSumX = 0;
         double integralSumY = 0;
-
+        double powerX = 0, powerY = 0;
         ElapsedTime timer = new ElapsedTime();
-        while (targetX - currentPosX > 0 || targetY - currentPosY > 0) {
+        while (!(targetX - currentPosX < 0 + thres && targetX - currentPosX > 0 - thres && targetY - currentPosY < 0 + thres && targetY - currentPosY > 0 - thres)) {
 
             OurRobot.Odometry.update();
 
@@ -156,19 +158,26 @@ public class Drivetrain implements Subsystem {
             //sum of all error over time
             integralSumX = integralSumX + (errorX * timer.seconds());
             integralSumY = integralSumY + (errorY * timer.seconds());
-
-            double powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
-            double powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
+            if (inchesX > inchesY) {
+                powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
+                powerY = (minorkP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
+            } else if (inchesX < inchesY) {
+                powerX = (minorkP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
+                powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
+            }
 
             //Power(power, Type);
 
-            frontLeft.setPower(powerY + powerX);
-            backLeft.setPower(powerY - powerX);
-            frontRight.setPower(powerY - powerX);
-            backRight.setPower(powerY + powerX);
+            frontLeft.setPower(powerY - powerX);
+            backLeft.setPower(powerY + powerX);
+            frontRight.setPower(powerY + powerX);
+            backRight.setPower(powerY - powerX);
 
             lastErrorX = errorX;
             lastErrorY = errorY;
+            opMode.telemetry.addData("Target - Current (X)", targetX - currentPosX);
+            opMode.telemetry.addData("Target - Current (Y)", targetY - currentPosY);
+            opMode.telemetry.update();
             timer.reset();
         }
     }

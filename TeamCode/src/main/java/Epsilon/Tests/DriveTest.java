@@ -15,6 +15,6 @@ public class DriveTest extends LinearOpMode {
         robot.initialize(this);
 
         waitForStart();
-        OurRobot.drivetrain.Move(0, 20);
+        OurRobot.drivetrain.Move(20, 0, this);
     }
 }
