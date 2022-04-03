@@ -22,7 +22,7 @@ public class Drivetrain implements Subsystem {
     public DcMotor backRight;
 
     //PID constants - will be tuned to different values
-    private double kP = 0.00007;
+    private double kP = 0.00008;
     private double minorkP = 0.00025;
     private double kI = 0.1;
     private double kD = 0.1;
@@ -140,7 +140,8 @@ public class Drivetrain implements Subsystem {
         double integralSumY = 0;
         double powerX = 0, powerY = 0;
         ElapsedTime timer = new ElapsedTime();
-        while (!(targetX - currentPosX < 0 + thres && targetX - currentPosX > 0 - thres && targetY - currentPosY < 0 + thres && targetY - currentPosY > 0 - thres)) {
+        while (!(targetX - currentPosX < thres && targetX - currentPosX > -thres
+                && targetY - currentPosY < thres && targetY - currentPosY > -thres)) {
 
             OurRobot.Odometry.update();
 
@@ -161,16 +162,16 @@ public class Drivetrain implements Subsystem {
 
             if (inchesX > inchesY) {
                 powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
-                powerY = (minorkP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
+                powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
             } else if (inchesX < inchesY) {
-                powerX = (minorkP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
+                powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
                 powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
             }
 
-            if (powerX < 0.1) {
+            if (powerX < 0.1 && powerX > 0) {
                 powerX = 0.1 * (errorX / Math.abs(errorX)); // determine pos or neg
             }
-            if (powerY < 0.1) {
+            if (powerY < 0.1 && powerY > 0) {
                 powerY = 0.1 * (errorY / Math.abs(errorY));
             }
             //Power(power, Type);
