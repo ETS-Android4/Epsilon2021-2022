@@ -87,7 +87,9 @@ public class Drivetrain implements Subsystem {
     public double INtoEC(double inches) {
         //Inches to Encoder Counts Stuff
         //(8192 ticks / 1 rev) * (1 rev / 1.96pi )
-        double COUNTS_PER_INCH = 8192/(Math.PI*1.96);
+        // 537 ticks/rev motor
+        //double COUNTS_PER_INCH = 8192/(Math.PI*1.96);
+        double COUNTS_PER_INCH = 45.2;
         double EncoderCounts = inches * COUNTS_PER_INCH;
         return EncoderCounts;
     }

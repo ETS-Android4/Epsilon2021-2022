@@ -21,12 +21,12 @@ public class Outtake implements Subsystem {
     public final double TICKS_PER_ROTATION = 357.7;       //this is correct
     double circumference = 1.8897637795;                             //circumference in inches
     public final double TICKS_PER_INCH = TICKS_PER_ROTATION/circumference;      //temporary numbers lmao please fix later
-    public final double ARM_EXTEND = 0.6;
+    public final double ARM_EXTEND = 0.9;
     public final double ARM_RETRACT = 0.0;
-    public final int ASH_BOTTOM = 400;
-    public final int ASH_MID = 740;
-    public final int ASH_TOP = 1100;
-    public final int FLOOR = 75;
+    public final int ASH_BOTTOM = 930; //400
+    public final int ASH_MID = 1450;   //740
+    public final int ASH_TOP = 1785; //908
+    public final int FLOOR = 690;
 
     public DcMotor upMotor;
     public Servo arm;
